@@ -8,6 +8,8 @@
 
 	<bean class="controller.ReservationController"> 
 			<property name="movieDao" ref="movieDao" />
+			<property name="theaterDao" ref="theaterDao" />
+			<property name="scheduleDao" ref="scheduleDao"/>
 	</bean>
 	
 	<!-- <bean class="controller.RegisterController">
