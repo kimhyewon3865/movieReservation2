@@ -27,4 +27,12 @@ public class ReservationService {
 			reservationDao.insert(newReservation);
 		}
 	}
+    
+    @Transactional
+	public void delete(ReservationRequest req) {
+    	
+//			Reservation newReservation = new Reservation(req.getScheduleId(), req.getUserId(), seatId);
+//			reservationDao.deleteReservation(reservation.getId());
+		
+	}
 }

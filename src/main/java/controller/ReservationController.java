@@ -97,11 +97,18 @@ public class ReservationController {
 	   }
 	 
 	 @RequestMapping("/reservationHistoryCancel")
-	    public String reservationHistoryCancel(Model model) {
+	 public String reservationHistoryCancel(Model model) {
 	        List<Reservation> listReservation = (List<Reservation>) reservationDao.selectByUserId("abc");
 	        model.addAttribute("listReservation", listReservation);
 	        
 	        return "reservationHistoryCancel";
-	    }
+	 }
+	 
+	 @RequestMapping("/cancelReservation")
+	 public String cancelReservation(Model model, @RequestParam(value="reservationId", required=false) Long reservationId) {
+		 reservationDao.deleteReservation(reservationId);
+		 return "reservationHistoryCancel";
+	 }
+	 
 
 }

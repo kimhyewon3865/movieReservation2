@@ -38,21 +38,6 @@ public class ReservationDao {
 		reservation.setId(keyValue.longValue());
 	}
     
-//    public Reservation selectByUserId(String userId) {
-//		List<Reservation> results = jdbcTemplate.query(
-//				"select * from reservation where userId = ?",new RowMapper<Reservation>() {
-//					@Override
-//					public Reservation mapRow(ResultSet rs, int rowNum)
-//							throws SQLException {
-//						Reservation reservation = new Reservation(rs.getInt("schedule"), rs.getString("userId"), rs.getInt("seatId"));
-//						reservation.setId(rs.getLong("ID"));
-//						return reservation;
-//					}
-//				},
-//				userId);
-//		return results.isEmpty() ? null : results.get(0);
-//	}
-    
     public List<Reservation> selectByUserId(String userId) {
         List<Reservation> results = jdbcTemplate.query("select * from reservation where userId = ?", new RowMapper<Reservation>() {
                     @Override
@@ -63,6 +48,12 @@ public class ReservationDao {
                     }
                 }, userId);
         return results;
+    }
+    
+    public void deleteReservation(Long id)
+    {
+        String deleteStatement = "DELETE FROM reservation WHERE id=?";
+        jdbcTemplate.update(deleteStatement, id);
     }
     
 }

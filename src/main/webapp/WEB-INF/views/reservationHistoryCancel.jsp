@@ -9,12 +9,23 @@
 <title>Insert title here</title>
 </head>
 <body>
-<ul>
+	<table>
       <c:forEach var="reservation" items="${listReservation}" varStatus="status">
-            <li style="display: list-item;">
-            <label>${reservation.id}</label>
-           	</li>
+      		<tr>
+            <td>
+            ${reservation.id}
+           	</td>
+           	<td> <input type="button" value="취소하기" class="payBtn" onclick="cancelBtnClick(${reservation.id})"/></td>
+      		</tr>
         </c:forEach>
-    </ul>
+    </table>
+    <script>
+    
+   	 function cancelBtnClick(reservationId) {
+   		alert(reservationId);
+        window.location = "http://localhost:8080/movieReservation/cancelReservation?reservationId=" + reservationId;
+   	 }
+
+    </script>
 </body>
 </html>
