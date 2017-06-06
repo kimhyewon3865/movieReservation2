@@ -23,7 +23,10 @@ public class ReservationService {
 	public void reservate(ReservationRequest req) {
 
 		for (int seatId: req.getSeatIds()) {
-			Reservation newReservation = new Reservation(req.getScheduleId(), req.getUserId(), seatId);
+			int waitOrder = reservationDao.lastWaitOrderByScheduleIdSeatId(req.getScheduleId(), seatId);
+			System.out.println("waitOrder: " + waitOrder);
+			Reservation newReservation = new Reservation(req.getScheduleId(), req.getUserId(), seatId, waitOrder);
+			System.out.println("newReservation: " + newReservation);
 			reservationDao.insert(newReservation);
 		}
 	}

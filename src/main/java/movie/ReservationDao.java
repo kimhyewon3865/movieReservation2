@@ -25,12 +25,13 @@ public class ReservationDao {
 			public PreparedStatement createPreparedStatement(Connection con) 
 					throws SQLException {
 				PreparedStatement pstmt = con.prepareStatement(
-						"insert into reservation (scheduleId, userId, seatId) "+
-						"values (?, ?, ?)",
+						"insert into reservation (scheduleId, userId, seatId, waitOrder) "+
+						"values (?, ?, ?, ?)",
 						new String[] {"ID"});
 				pstmt.setInt(1,  reservation.getScheduleId());
 				pstmt.setString(2,  reservation.getUserId());
 				pstmt.setInt(3,  reservation.getSeatId());
+				pstmt.setInt(4,  reservation.getWaitOrder());
 				return pstmt;
 			}
 		}, keyHolder);
@@ -42,7 +43,7 @@ public class ReservationDao {
         List<Reservation> results = jdbcTemplate.query("select * from reservation where userId = ?", new RowMapper<Reservation>() {
                     @Override
                     public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    	Reservation reservation = new Reservation(rs.getInt("scheduleId"), rs.getString("userId"), rs.getInt("seatId"));
+                    	Reservation reservation = new Reservation(rs.getInt("scheduleId"), rs.getString("userId"), rs.getInt("seatId"), rs.getInt("waitOrder"));
                     	reservation.setId(rs.getLong("id"));
                         return reservation;
                     }
@@ -50,10 +51,29 @@ public class ReservationDao {
         return results;
     }
     
-    public void deleteReservation(Long id)
-    {
+    public void deleteReservation(Long id) {
         String deleteStatement = "DELETE FROM reservation WHERE id=?";
         jdbcTemplate.update(deleteStatement, id);
     }
     
+    public int count() {
+		Integer count = jdbcTemplate.queryForObject("select count(*) from MEMBER", Integer.class);
+		return count;
+	}
+    
+    public Integer lastWaitOrderByScheduleIdSeatId(int scheduleId, int seatId) {
+//    	Integer count = jdbcTemplate.query("select count(*)  from reservation where scheduleId = ? AND seatId = ? ", new RowMapper<Reservation>() {
+//    		@Override
+//    		public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
+//    			Reservation reservation = new Reservation(rs.getInt("scheduleId"), rs.getString("userId"), rs.getInt("seatId"), rs.getInt("waitOrder"));
+//    			reservation.setId(rs.getLong("id"));
+//    			return reservation;
+//    		}
+//    	}, scheduleId, seatId);
+    	String query = "select count(*)  from reservation where scheduleId = "+scheduleId + " AND seatId = " + seatId;
+		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		System.out.println("sql count: " + count + "query: " + query );
+    	return count;
+    }
+        
 }

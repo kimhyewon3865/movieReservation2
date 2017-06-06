@@ -8,11 +8,13 @@ public class Reservation {
     private int scheduleId;
     private String userId;
 	private int seatId;
+	private int waitOrder;
 	
-	public Reservation(int scheduleId, String userId, Integer seatId) {
+	public Reservation(int scheduleId, String userId, Integer seatId, int waitOrder) {
 		this.scheduleId = scheduleId;
 		this.userId = userId;
 		this.seatId = seatId;
+		this.waitOrder = waitOrder;
 	}
 
 	public Long getId() {
@@ -46,4 +48,14 @@ public class Reservation {
 	public void setSeatIds(int seatId) {
 		this.seatId = seatId;
 	}
+	
+	public int getWaitOrder() {
+		return waitOrder;
+	}
+	
+	public void setWaitOrder(int waitOrder) {
+		this.waitOrder = waitOrder;
+	}
 }
+	
+	
