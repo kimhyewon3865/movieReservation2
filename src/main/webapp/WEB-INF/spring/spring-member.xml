@@ -29,6 +29,14 @@
 		<constructor-arg ref="dataSource" />
 	</bean>
 	
+	<bean id="reservationDao" class="movie.ReservationDao">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<bean id="reservationService" class="movie.ReservationService">
+		<constructor-arg ref="reservationDao" />
+	</bean>
+	
 	<!-- <bean id="memberRegSvc" class="spring.MemberRegisterService">
 		<constructor-arg ref="memberDao" />
 	</bean>

@@ -10,8 +10,25 @@
 	<%-- <p> movieId: <%= request.getParameter("movieId")%></p>
  	<p> theater id : <%= request.getParameter("theaterId")%> </p>
  	<p> scheduleId : <%= request.getParameter("scheduleId")%> </p> --%>
- 	<p> movie Id: ${movie} </p>
- 	<p> theater Id: ${theater} </p>
+ 	
  	<p> schedule Id: ${schedule} </p>
+ 	
+ 	<form action="addReservation" method="post">
+ 		 <ul> 
+ 			  <input type="hidden" name="scheduleId" value="${schedule}"> 
+ 			 <input type="hidden" name="userId" value="abc">  
+ 			
+ 			 <li>
+ 				<input id="1" name="seatIds" type="checkbox" value="1"/>
+				<label for="1">1</label>
+ 			</li>
+ 			
+ 			<li>
+ 				<input id="2" name="seatIds" type="checkbox" value="2"/>
+				<label for="2">2</label>
+ 			</li> 
+ 		 </ul>		
+ 		<input type="submit" value="Submit"/>
+ 	</form>
 </body>
 </html>

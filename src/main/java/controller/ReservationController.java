@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import movie.Movie;
 import movie.MovieDao;
+import movie.Reservation;
+import movie.ReservationRequest;
+import movie.ReservationService;
 import movie.Schedule;
 import movie.ScheduleDao;
 import movie.SelectionMovieTheaterDate;
@@ -21,6 +24,13 @@ public class ReservationController {
 	private MovieDao movieDao;
 	private TheaterDao theaterDao;
 	private ScheduleDao scheduleDao; 
+    
+	private ReservationService reservationService;
+
+	public void setReservationService(
+			ReservationService reservationService) {
+		this.reservationService = reservationService;
+	}
 	
 	public void setMovieDao(MovieDao movieDao) {
 		this.movieDao = movieDao;
@@ -68,4 +78,27 @@ public class ReservationController {
         
 		return "selectSeatTest";
 	}
+	
+	 @RequestMapping(value = "/addReservation", method = RequestMethod.POST)
+	   public String addReservation(ReservationRequest reservationRequest, Model model) {
+		  reservationService.reservate(reservationRequest);
+
+		  model.addAttribute("scheduleId", reservationRequest.getScheduleId());
+		  model.addAttribute("userId", reservationRequest.getUserId());
+		  model.addAttribute("seatIds", reservationRequest.getSeatIds());
+		  
+	      return "addReservation";
+	   }
+	
+//	  @RequestMapping(value = "/addReservation", method = RequestMethod.POST)
+//	   public String addReservation(ReservationRequest reservationRequest, Model model) {
+//		 
+//		  reservationService.reservate(reservationRequest);
+//		  
+//		  model.addAttribute("scheduleId", reservationRequest.getScheduleId());
+//		  model.addAttribute("seatIds", reservationRequest.getUserId());
+//		  model.addAttribute("seatIds", reservationRequest.getSeatIds());
+//		  
+//	      return "addReservation";
+//	   }
 }
