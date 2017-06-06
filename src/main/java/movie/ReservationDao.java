@@ -17,28 +17,6 @@ public class ReservationDao {
     public ReservationDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-
-    //insert
-//    public void insert(final Reservation reservation) {
-//        KeyHolder keyHolder = new GeneratedKeyHolder();
-//        jdbcTemplate.update(new PreparedStatementCreator() {
-//            @Override
-//            public PreparedStatement createPreparedStatement(Connection con)
-//                    throws SQLException {
-//
-//                PreparedStatement pstmt = con.prepareStatement("INSERT INTO reservation (scheduleId, userId, seatId)" + "VALUES (?, ?, ?)");
-//
-//                pstmt.setInt(1,  reservation.getScheduleId());
-//                pstmt.setString(2,  reservation.getUserId());
-//                pstmt.setInt(3, reservation.getSeatId());
-//               
-//                return pstmt;
-//            }
-//        }, keyHolder);
-//        Number keyValue = keyHolder.getKey();
-//        reservation.setId(keyValue.longValue());
-//    }
-//    
     
     public void insert(final Reservation reservation) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -59,4 +37,32 @@ public class ReservationDao {
 		Number keyValue = keyHolder.getKey();
 		reservation.setId(keyValue.longValue());
 	}
+    
+//    public Reservation selectByUserId(String userId) {
+//		List<Reservation> results = jdbcTemplate.query(
+//				"select * from reservation where userId = ?",new RowMapper<Reservation>() {
+//					@Override
+//					public Reservation mapRow(ResultSet rs, int rowNum)
+//							throws SQLException {
+//						Reservation reservation = new Reservation(rs.getInt("schedule"), rs.getString("userId"), rs.getInt("seatId"));
+//						reservation.setId(rs.getLong("ID"));
+//						return reservation;
+//					}
+//				},
+//				userId);
+//		return results.isEmpty() ? null : results.get(0);
+//	}
+    
+    public List<Reservation> selectByUserId(String userId) {
+        List<Reservation> results = jdbcTemplate.query("select * from reservation where userId = ?", new RowMapper<Reservation>() {
+                    @Override
+                    public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    	Reservation reservation = new Reservation(rs.getInt("scheduleId"), rs.getString("userId"), rs.getInt("seatId"));
+                    	reservation.setId(rs.getLong("id"));
+                        return reservation;
+                    }
+                }, userId);
+        return results;
+    }
+    
 }

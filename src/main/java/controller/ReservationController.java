@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import movie.Movie;
 import movie.MovieDao;
 import movie.Reservation;
+import movie.ReservationDao;
 import movie.ReservationRequest;
 import movie.ReservationService;
 import movie.Schedule;
@@ -24,6 +25,7 @@ public class ReservationController {
 	private MovieDao movieDao;
 	private TheaterDao theaterDao;
 	private ScheduleDao scheduleDao; 
+    private ReservationDao reservationDao;
     
 	private ReservationService reservationService;
 
@@ -42,6 +44,10 @@ public class ReservationController {
 	
 	public void setScheduleDao(ScheduleDao scheduleDao) {
 		this.scheduleDao = scheduleDao;
+	}
+	
+	public void setReservationDao(ReservationDao reservationDao) {
+		this.reservationDao = reservationDao;
 	}
 	
 	@RequestMapping("/")
@@ -89,16 +95,13 @@ public class ReservationController {
 		  
 	      return "addReservation";
 	   }
-	
-//	  @RequestMapping(value = "/addReservation", method = RequestMethod.POST)
-//	   public String addReservation(ReservationRequest reservationRequest, Model model) {
-//		 
-//		  reservationService.reservate(reservationRequest);
-//		  
-//		  model.addAttribute("scheduleId", reservationRequest.getScheduleId());
-//		  model.addAttribute("seatIds", reservationRequest.getUserId());
-//		  model.addAttribute("seatIds", reservationRequest.getSeatIds());
-//		  
-//	      return "addReservation";
-//	   }
+	 
+	 @RequestMapping("/reservationHistoryCancel")
+	    public String reservationHistoryCancel(Model model) {
+	        List<Reservation> listReservation = (List<Reservation>) reservationDao.selectByUserId("abc");
+	        model.addAttribute("listReservation", listReservation);
+	        
+	        return "reservationHistoryCancel";
+	    }
+
 }

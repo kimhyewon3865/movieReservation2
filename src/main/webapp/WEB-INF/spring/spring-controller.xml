@@ -10,6 +10,7 @@
 			<property name="movieDao" ref="movieDao" />
 			<property name="theaterDao" ref="theaterDao" />
 			<property name="scheduleDao" ref="scheduleDao"/>
+			<property name="reservationDao" ref="reservationDao"/>
 			<property name="reservationService" ref="reservationService"/>
 	</bean>
 	
