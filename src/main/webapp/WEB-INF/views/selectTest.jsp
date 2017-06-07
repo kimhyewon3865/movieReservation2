@@ -5,7 +5,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js'></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -14,9 +16,9 @@
      <ul>
 
       <c:forEach var="movie" items="${listMovie}" varStatus="status">
-            <li style="display: list-item;" onclick="setSelectedMovie(${status.index})">
+            <li onclick="setSelectedMovie(${movie.id})" id="movie${movie.id}">
             <label><input type="radio" 
-					              name="movieResponse[${status.index}]" value="${movie.name}" >
+					              name="movieResponse" value="${movie.name}" >
 						${movie.name}</label>
            	</li>
         </c:forEach>
@@ -70,8 +72,53 @@
     
     function setSelectedMovie(movieId) {
         selectedMovieId = movieId;
-    }
+        $("#movie"+movieId).click(function () {
+        	//        $("li").removeAttr("style");
+            $(this).css("background-color", "lightblue");
+            $.ajax({
+                url : "http://localhost:8080/movieReservation/selectTest2",
+                type: "get",
+                data : { "movieId" : movieId },
+                success : function(data){
+                    $("#ajax").remove();
+                    alert(data);
+                    /* if(!data){
+                        alert("존재하지 않는 ID입니다");
+                        return false;
+                    }
+                    var html = '';
+                    html += '<form class="form-signin" action="" id="ajax">';
+                    html += '이름<input type="text" class="form-control"  name="name" value="'+data.name+'">';
+                    html += '아이디<input type="text" class="form-control" name=id" value="'+data.id+'">';
+                    html += '이메일<input type="text" class="form-control"  name="email" value="'+data.email+'">';
+                    html += '비밀번호<input type="text" class="form-control" name="password" value="'+data.password+'">';
+                    html += '</form>';
+                    $("#container").after(html); */
+                }
+            });
+        });
+       
+       /*  alert(selectedMovieId);
+        $.ajax({
+            url : "http://localhost:8080/movieReservation/selectTest2",
+            type: "get",
+            data : { "movieId" : selectedMovieId },
+            success : function(data) {
+                alert(data);
+            },
+            error : function(request, status, error) {
+                 if (request.status != '0') {
+                 alert("code : " + request.status + "\r\nmessage : "
+                   + request.reponseText + "\r\nerror : " + error);
+                } 
+                alert("err");
+               }
+        });
+        alert("end"); */
 
+    }
+    
+    
     function setSelectedTeahterId(theaterId) {
         selectedTheaterId = theaterId;
     }
@@ -94,6 +141,63 @@
         + "&room=" + selectedRoomId + "&time=" + selectedTime ; */
     	 window.location = "http://localhost:8080/movieReservation/selectSeatTest?movie=" + selectedMovieId + "&theater=" + selectedTheaterId + "&schedule=" + selectedScheduleId;
     }
+    
+    /* $("#movie").bind("click",function() {
+    	alert("hi");
+        $.ajax({
+            url : "movieReservation/selectTest2",
+            type: "get",
+            data : { "movieId" : selectedMovieId },
+            success : function(data) {
+                $("#ajax").remove();
+                alert(data);
+            },
+            error : function(request, status, error) {
+                if (request.status != '0') {
+                 alert("code : " + request.status + "\r\nmessage : "
+                   + request.reponseText + "\r\nerror : " + error);
+                }
+               }
+        });
+    }) */
+    
+    
+    function test(movieId) {
+    	/* $("#movie"+movieId).bind("click",function(){
+            $.ajax({
+                url : "movieReservation/selectTest2",
+                type: "get",
+                data : { "movieId" : movieId },
+                success : function(data){
+                    $("#ajax").remove();
+                    alert(data);
+                    /* if(!data){
+                        alert("존재하지 않는 ID입니다");
+                        return false;
+                    } */
+                    /* var html = '';
+                    html += '<form class="form-signin" action="" id="ajax">';
+                    html += '이름<input type="text" class="form-control"  name="name" value="'+data.name+'">';
+                    html += '아이디<input type="text" class="form-control" name=id" value="'+data.id+'">';
+                    html += '이메일<input type="text" class="form-control"  name="email" value="'+data.email+'">';
+                    html += '비밀번호<input type="text" class="form-control" name="password" value="'+data.password+'">';
+                    html += '</form>';
+                    $("#container").after(html);
+                }
+                error : function(request, status, error) {
+                    if (request.status != '0') {
+                     alert("code : " + request.status + "\r\nmessage : "
+                       + request.reponseText + "\r\nerror : " + error);
+                    }
+                   }
+
+                
+            });
+
+        }); */
+    }
+    
+    
 	</script>
 </body>
 </html>

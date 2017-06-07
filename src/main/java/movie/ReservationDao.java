@@ -56,24 +56,15 @@ public class ReservationDao {
         jdbcTemplate.update(deleteStatement, id);
     }
     
-    public int count() {
-		Integer count = jdbcTemplate.queryForObject("select count(*) from MEMBER", Integer.class);
-		return count;
-	}
-    
     public Integer lastWaitOrderByScheduleIdSeatId(int scheduleId, int seatId) {
-//    	Integer count = jdbcTemplate.query("select count(*)  from reservation where scheduleId = ? AND seatId = ? ", new RowMapper<Reservation>() {
-//    		@Override
-//    		public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-//    			Reservation reservation = new Reservation(rs.getInt("scheduleId"), rs.getString("userId"), rs.getInt("seatId"), rs.getInt("waitOrder"));
-//    			reservation.setId(rs.getLong("id"));
-//    			return reservation;
-//    		}
-//    	}, scheduleId, seatId);
     	String query = "select count(*)  from reservation where scheduleId = "+scheduleId + " AND seatId = " + seatId;
 		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
-		System.out.println("sql count: " + count + "query: " + query );
     	return count;
+    }
+    
+    public void update(int scheduleId, int seatId) {
+    	
+//    	jdbcTemplate.update("update reservation set waitOrder = ? where scheduleId = ? AND seatId = ?", , scheduleId, seatId);
     }
         
 }

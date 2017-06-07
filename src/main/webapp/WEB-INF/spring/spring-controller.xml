@@ -14,6 +14,7 @@
 			<property name="reservationService" ref="reservationService"/>
 	</bean>
 	
+	
 	<!-- <bean class="controller.RegisterController">
 		<property name="memberRegisterService" ref="memberRegSvc" />
 	</bean>

@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+
 public class ScheduleDao {
 	private JdbcTemplate jdbcTemplate;
 
@@ -28,5 +29,33 @@ public class ScheduleDao {
         return results;
     }
     
+    public Schedule selectScheduleByMovieId(int movieId) {
+		List<Schedule> results = jdbcTemplate.query(
+				"select * from schedule where movieId = ?",
+				new RowMapper<Schedule>() {
+					@Override
+					public Schedule mapRow(ResultSet rs, int rowNum)
+							throws SQLException {
+						Schedule schedule = new Schedule(
+								rs.getInt("movieId"), rs.getDate("date"), rs.getString("startTime"), rs.getString("endTime"), rs.getInt("theaterId"), rs.getInt("roomId"));
+						schedule.setId(rs.getInt("id"));
+						return schedule;
+					}
+				},
+				movieId);
+
+		return results.isEmpty() ? null : results.get(0);
+	}
     
+//    public List<Schedule> selectScheduleByMovieId(int movieId) {
+//        List<Schedule> results = jdbcTemplate.query("select * from schedule where movieId = ?", new RowMapper<Schedule>() {
+//                    @Override
+//                    public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                    	Schedule schedule = new Schedule(rs.getInt("movieId"), rs.getDate("date"), rs.getString("startTime"), rs.getString("endTime"), rs.getInt("theaterId"), rs.getInt("roomId"));
+//                    	schedule.setId(rs.getInt("id"));
+//                        return schedule;
+//                    }
+//                }, movieId);
+//        return results;
+//    }
 }

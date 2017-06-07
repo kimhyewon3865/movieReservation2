@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import movie.Movie;
 import movie.MovieDao;
@@ -84,6 +85,20 @@ public class ReservationController {
         
 		return "selectSeatTest";
 	}
+	
+//	@RequestMapping(value="/selectSeatTest2")
+//	@ResponseBody
+//	public String selectSeatTest2(@RequestParam(value = "movieId", required = false) int movieId){
+////		Schedule schedules = (Schedule) scheduleDao.selectScheduleByMovieId(movieId);
+//		return "selectSeatTest2"; 
+//	}
+	@RequestMapping(value= "/selectTest2", method=RequestMethod.GET)
+	public @ResponseBody Schedule AjaxView( @RequestParam("movieId") int movieId)  {
+		Schedule schedule = scheduleDao.selectScheduleByMovieId(movieId);
+//	    SocialPerson person = dao.getPerson(id);
+	    return schedule;
+	}
+	
 	
 	 @RequestMapping(value = "/addReservation", method = RequestMethod.POST)
 	   public String addReservation(ReservationRequest reservationRequest, Model model) {

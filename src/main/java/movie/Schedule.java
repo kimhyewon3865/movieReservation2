@@ -4,15 +4,15 @@ import java.sql.Date;
 
 public class Schedule {
 	int id;
-    int movie;
+    int movieId;
     Date date;
     String startTime;
     String endTime;
     int theaterId;
     int roomId;
     
-    public Schedule(int movie, Date date, String startTime, String endTime, int theaterId, int roomId) {
-    	this.movie = movie;
+    public Schedule(int movieId, Date date, String startTime, String endTime, int theaterId, int roomId) {
+    	this.movieId = movieId;
     	this.date = date;
     	this.startTime = startTime;
     	this.endTime = endTime;
@@ -23,13 +23,17 @@ public class Schedule {
     public void setId(int id) {
     	this.id = id;
     }
-
+	
+    public int getId() {
+		return id;
+	}
+	
 	public int getMovie() {
-		return movie;
+		return movieId;
 	}
 
 	public void setMovie(int movie) {
-		this.movie = movie;
+		this.movieId = movie;
 	}
 
 	public Date getDate() {
@@ -72,9 +76,7 @@ public class Schedule {
 		this.roomId = roomId;
 	}
 
-	public int getId() {
-		return id;
-	}
+
     
     
 }
