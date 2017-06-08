@@ -29,4 +29,10 @@ public class MovieDao {
 	                });
 	        return results;
 	    }
+	    
+	    public String selectMovieNameByMovieId(int movieId) {
+	    	String query = "select name from movie where id = " + movieId;
+	    	String name = jdbcTemplate.queryForObject(query, String.class);
+	    	return name;
+	    }
 }

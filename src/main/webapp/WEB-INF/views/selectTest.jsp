@@ -12,6 +12,19 @@
 </head>
 <body>
 <!-- <form action="selectSeatTest" method="post"> -->
+ <h3>좌석대기테스트  </h3>
+     <ul>
+
+      <c:forEach var="seatWaitOrder" items="${seatWaitOrderList}" varStatus="status">
+            <li>
+            <label><input type="radio" 
+					              name="seatWaitOrder" value="${seatWaitOrder}" >
+						${seatWaitOrder}</label>
+           	</li>
+        </c:forEach>
+    </ul> 
+
+
 <h3>영화 </h3>
      <ul>
 
@@ -27,7 +40,7 @@
      <h3>영화관 </h3>
       <ul>
       <c:forEach var="theater" items="${ listTheater }" varStatus="status">
-            <li onclick="setSelectedTeahterId(${status.index})">
+            <li onclick="setSelectedTeahterId(${theater.id})">
             	<input type="radio" name="theaterId" id="theater1" onclick="">
                 <label for="theater1"> ${theater.id}</label>
                 

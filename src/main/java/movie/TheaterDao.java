@@ -28,5 +28,10 @@ public class TheaterDao {
 	        return results;
 	    }
 	   
+	    public String selectTheaterNameByTheaterId(int theaterId) {
+	    	String query = "select name from theater where id = " + theaterId;
+	    	String name = jdbcTemplate.queryForObject(query, String.class);
+	    	return name;
+	    }
 }
 

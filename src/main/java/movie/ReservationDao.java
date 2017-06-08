@@ -1,6 +1,7 @@
 package movie;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -61,6 +62,29 @@ public class ReservationDao {
 		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
     	return count;
     }
+    
+    public List<Integer> selectSeatIdByRoomIdTheaterId(int roomId, int theaterId) {
+        List<Integer> results = jdbcTemplate.query("select id from seat where roomId = ? and theaterId = ?", new RowMapper<Integer>() {
+                    @Override
+                    public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    	return rs.getInt("id");
+                    }
+                }, roomId, theaterId);
+        return results;
+    }
+    
+    //TODO: 제대로 값넘어오는지 확인 
+    public List<Integer> selectSeatWaitOrdersByScheduleIdRoomIdTheaterId(int scheduleId, int roomId, int theaterId) {
+    	List<Integer> seatIds = selectSeatIdByRoomIdTheaterId(roomId, theaterId);
+    	List<Integer> waitOrders = new ArrayList<Integer>();
+    	for (int seatId: seatIds) {
+    		Integer count = lastWaitOrderByScheduleIdSeatId(scheduleId, seatId);
+    		waitOrders.add(count);
+    	}
+    	
+    	return waitOrders;
+    }
+    
     
     public void update(int scheduleId, int seatId) {
     	

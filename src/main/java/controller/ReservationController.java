@@ -62,7 +62,13 @@ public class ReservationController {
         List<Movie> listMovie = movieDao.selectAll();
         List<Theater> listTheater = theaterDao.selectAll();
         List<Schedule> listSchedule = scheduleDao.selectAll();
-
+        
+//        //TODO: TEST
+//        List<Integer> seatIdList = reservationDao.selectSeatIdByRoomIdTheaterId(1, 1);
+//        model.addAttribute("seatIdList", seatIdList);
+        List<Integer> seatWaitOrderList = reservationDao.selectSeatWaitOrdersByScheduleIdRoomIdTheaterId(8, 2, 2);
+        model.addAttribute("seatWaitOrderList", seatWaitOrderList);
+        
         model.addAttribute("listMovie", listMovie);
         model.addAttribute("listTheater", listTheater);
         model.addAttribute("listSchedule", listSchedule);
@@ -71,14 +77,26 @@ public class ReservationController {
     }
 	
 	@RequestMapping(value="/selectSeatTest")
-	public String selectSeatTest(Model model, @RequestParam(value="movie", required=false) String movie,
-											@RequestParam(value="theater", required=false) String theater,
-											@RequestParam(value="schedule", required=false) String schedule) {
+	public String selectSeatTest(Model model, @RequestParam(value="movie", required=false) int movie,
+											@RequestParam(value="theater", required=false) int theater,
+											@RequestParam(value="schedule", required=false) int schedule) {
 //		model.addAttribute("movieId", selection.getMovieId());
 //		model.addAttribute("theaterId", selection.getTheaterId());
 ////		model.addAttribute("date", selection.getDate());
 //		model.addAttribute("scheduleId", selection.getScheduleId());
+		List<Integer> seatWaitOrderList = reservationDao.selectSeatWaitOrdersByScheduleIdRoomIdTheaterId(schedule, movie, theater);
+        model.addAttribute("seatWaitOrderList", seatWaitOrderList);
 		
+		
+        Schedule selectedSchedule = scheduleDao.selectScheduleById(schedule);
+        model.addAttribute("selectedSchedule", selectedSchedule);
+        
+        String movieName = movieDao.selectMovieNameByMovieId(movie);
+        String theaterName = theaterDao.selectTheaterNameByTheaterId(theater);
+        model.addAttribute("movieName", movieName);
+        model.addAttribute("theaterName", theaterName);
+        
+        
 		model.addAttribute("movie", movie);
         model.addAttribute("theater", theater);
         model.addAttribute("schedule", schedule);
@@ -104,10 +122,26 @@ public class ReservationController {
 	   public String addReservation(ReservationRequest reservationRequest, Model model) {
 		  reservationService.reservate(reservationRequest);
 
-		  model.addAttribute("scheduleId", reservationRequest.getScheduleId());
+		  int scheduleId = reservationRequest.getScheduleId();
+		  
+		  
+		  model.addAttribute("scheduleId", scheduleId);
 		  model.addAttribute("userId", reservationRequest.getUserId());
 		  model.addAttribute("seatIds", reservationRequest.getSeatIds());
 		  
+		  Schedule selectedSchedule = scheduleDao.selectScheduleById(scheduleId);
+	        model.addAttribute("selectedSchedule", selectedSchedule);
+	        
+//	      String movieName = movieDao.selectMovieNameByMovieId(movie); //조
+//	      String theaterName = theaterDao.selectTheaterNameByTheaterId(theater);
+//	      model.addAttribute("movieName", movieName);
+//	      model.addAttribute("theaterName", theaterName);
+		  
+	      String movieName = scheduleDao.selectMovieNameByscheduleId(scheduleId);
+	      String theaterName = scheduleDao.selectTheaterNameByscheduleId(scheduleId);
+	      model.addAttribute("movieName", movieName);
+	      model.addAttribute("theaterName", theaterName);
+	      
 	      return "addReservation";
 	   }
 	 
