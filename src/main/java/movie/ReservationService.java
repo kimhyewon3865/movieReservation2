@@ -10,14 +10,6 @@ public class ReservationService {
     public ReservationService(ReservationDao reservationDao) {
         this.reservationDao = reservationDao;
     }
-
-//    @Transactional
-//    public void reservate(ReservationRequest req) {
-//        for (Integer seatid: req.getSeatIds()) {
-//            Reservation newReservation = new Reservation(req.getScheduleId(), req.getUserId(), seatid);
-//            reservationDao.insert(newReservation);
-//        }
-//    }
     
     @Transactional
 	public void reservate(ReservationRequest req) {
@@ -30,12 +22,9 @@ public class ReservationService {
 			reservationDao.insert(newReservation);
 		}
 	}
+  
     
     @Transactional
 	public void delete(ReservationRequest req) {
-    	
-//			Reservation newReservation = new Reservation(req.getScheduleId(), req.getUserId(), seatId);
-//			reservationDao.deleteReservation(reservation.getId());
-		
 	}
 }

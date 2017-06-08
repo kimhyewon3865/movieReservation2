@@ -137,36 +137,16 @@ public class ReservationController {
 	 @RequestMapping(value = "/addReservation", method = RequestMethod.POST)
 	   public String addReservation(ReservationRequest reservationRequest, Model model) {
 		  reservationService.reservate(reservationRequest); //insert
-		  //request : scheduleid, userid, seatids
-		  //jsp에서 for 문 돌리는 객체는 없고 seatIds수만큼 돌
-		  //output data : 영화 극장 날짜 시간 좌석번호 가격 -> 반복: 영화 극장 날짜 시간/ 반복x: 좌석번호 가격 
+		  
 		  int scheduleId = reservationRequest.getScheduleId(); 
 		 		  
 		  model.addAttribute("scheduleId", scheduleId);
 		  model.addAttribute("userId", reservationRequest.getUserId());
 		  model.addAttribute("seatIds", reservationRequest.getSeatIds());
 
-		  // 반복 x 객체 
-		  Schedule selectedSchedule = scheduleDao.selectScheduleById(scheduleId);
-	      model.addAttribute("selectedSchedule", selectedSchedule);
-	      Movie selectedMovie = scheduleDao.selectMovieByScheduleId(scheduleId); //id 통해서 seat 객체 받아오기 위 
-	      String theaterName = scheduleDao.selectTheaterNameByscheduleId(scheduleId); 
-	      model.addAttribute("movieName", selectedMovie.getName());
-	      model.addAttribute("theaterName", theaterName);
+	      List<ReservationView> listReservationView = reservationViewDao.selectByScheduleIdUserIdSeatIds(scheduleId, reservationRequest.getUserId(), reservationRequest.getSeatIds());
+	      model.addAttribute("listReservationView", listReservationView);
 	      
-	      // 반복 객체 - seats? reservation? seat!!!
-	      int selectedRoomId = selectedSchedule.getRoomId();
-	      int selectedTheaterId = selectedSchedule.getTheaterId();
-	      
-//	      List<Seat> listSeat = seatDao.selectSeatByIdRoomIdTheaterId(reservationRequest.getSeatIds(), selectedRoomId, selectedTheaterId);
-	      //TODO: 예약한 Seat 객체 받아와 넘겨주기  
-	      List<Seat> listSeat = seatDao.selectSeatByIdRoomIdTheaterId(reservationRequest.getSeatIds(), 2, 2);//이부분에서 에러 
-	      System.out.println("listSeat: " + listSeat);
-	      model.addAttribute("listSeat", listSeat);
-	      
-//	      List<Integer> seatPrices = seatDao.selectSeatPriceByIdsRoomIdTheaterId(reservationRequest.getSeatIds(), roomId, theaterId);
-//	      model.addAttribute("seatPrices", seatPrices);
-//	      
 	      return "addReservation";
 	   }
 	 
@@ -184,6 +164,4 @@ public class ReservationController {
 		 reservationDao.deleteReservation(reservationId);
 		 return "reservationHistoryCancel";
 	 }
-	 
-
 }
