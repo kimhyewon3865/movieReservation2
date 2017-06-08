@@ -75,15 +75,15 @@ public class ScheduleDao {
     	return name;
     }
     
-//    public List<Schedule> selectScheduleByMovieId(int movieId) {
-//        List<Schedule> results = jdbcTemplate.query("select * from schedule where movieId = ?", new RowMapper<Schedule>() {
-//                    @Override
-//                    public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
-//                    	Schedule schedule = new Schedule(rs.getInt("movieId"), rs.getDate("date"), rs.getString("startTime"), rs.getString("endTime"), rs.getInt("theaterId"), rs.getInt("roomId"));
-//                    	schedule.setId(rs.getInt("id"));
-//                        return schedule;
-//                    }
-//                }, movieId);
-//        return results;
-//    }
+    public Movie selectMovieByScheduleId(int scheduleId) {
+        List<Movie> results = jdbcTemplate.query("select m.id, m.name, m.grade, m.genre, m.nation, m.viewingTime, m.releaseDate, m.director from schedule s, movie m where m.id = s.movieId and s.id = ?", new RowMapper<Movie>() {
+                    @Override
+                    public Movie mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    	Movie movie = new Movie(rs.getString("name"), rs.getInt("grade"), rs.getString("genre"), rs.getString("nation"), rs.getString("viewingTime"), rs.getDate("releaseDate"), rs.getString("director"));
+                    	movie.setId(rs.getInt("id"));
+                        return movie;
+                    }
+                }, scheduleId);
+        return results.isEmpty() ? null : results.get(0);
+    }
 }

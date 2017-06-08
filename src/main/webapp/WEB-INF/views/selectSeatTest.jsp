@@ -148,5 +148,10 @@
  		<input type="button" value="상영시간 변경하기" class="backBtn" onclick="backBtnClick()"/>
  	</div>
  
+ <script>
+ function backBtnClick() {
+     window.location = "http://localhost:8080/movieReservation/selectTest";
+ }
+ </script>
 </body>
 </html>

@@ -33,6 +33,14 @@
 		<constructor-arg ref="dataSource" />
 	</bean>
 	
+	<bean id="seatDao" class="movie.SeatDao">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<bean id="reservationViewDao" class="movie.ReservationViewDao">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
 	<bean id="reservationService" class="movie.ReservationService">
 		<constructor-arg ref="reservationDao" />
 	</bean>

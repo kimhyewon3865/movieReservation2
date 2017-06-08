@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+
 public class MovieDao {
 	  private JdbcTemplate jdbcTemplate;
 
@@ -35,4 +36,11 @@ public class MovieDao {
 	    	String name = jdbcTemplate.queryForObject(query, String.class);
 	    	return name;
 	    }
+	    
+	    public String selectMovieByMovieId(int movieId) {
+	    	String query = "select * from movie where id = " + movieId;
+	    	String name = jdbcTemplate.queryForObject(query, String.class);
+	    	return name;
+	    }
+	    
 }

@@ -73,7 +73,7 @@ public class ReservationDao {
         return results;
     }
     
-    //TODO: 제대로 값넘어오는지 확인 
+    
     public List<Integer> selectSeatWaitOrdersByScheduleIdRoomIdTheaterId(int scheduleId, int roomId, int theaterId) {
     	List<Integer> seatIds = selectSeatIdByRoomIdTheaterId(roomId, theaterId);
     	List<Integer> waitOrders = new ArrayList<Integer>();
@@ -85,10 +85,28 @@ public class ReservationDao {
     	return waitOrders;
     }
     
-    
-    public void update(int scheduleId, int seatId) {
-    	
-//    	jdbcTemplate.update("update reservation set waitOrder = ? where scheduleId = ? AND seatId = ?", , scheduleId, seatId);
+    public List<Integer> selectReservationIdsByScheduleIdSeatId(Long reservationId) {
+    	List<Integer> results = jdbcTemplate.query("select r2.id from reservation r1, reservation r2 where r1.scheduleId = r2.scheduleId and r1.seatId = r2.seatId and r1.id = ? and r2.id != ?;", new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+            	return rs.getInt("id");
+            }
+        }, reservationId, reservationId);
+    	return results;
     }
+    
+    
+    public void update(Long reservationId) {
+    	List<Integer> reservationIds = selectReservationIdsByScheduleIdSeatId(reservationId);
+    	
+    	String waitOrderQuery = "select waitOrder from reservation where id = " + reservationId;
+    	Integer waitOrder = jdbcTemplate.queryForObject(waitOrderQuery, Integer.class);
+    	
+    	for (int id: reservationIds) {
+    		String query = "update reservation set waitOrder = waitOrder - 1 where id = " + id + " and waitOrder > " + waitOrder ;
+    		jdbcTemplate.update(query);
+    	}
+    }
+
         
 }

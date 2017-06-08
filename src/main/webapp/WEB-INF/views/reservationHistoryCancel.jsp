@@ -6,10 +6,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="<c:url value="/resources/css/navigation.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/reservationHistoryCancel.css" />" rel="stylesheet">
 <title>Insert title here</title>
 </head>
 <body>
-	<table>
+<%-- 	<table>
       <c:forEach var="reservation" items="${listReservation}" varStatus="status">
       		<tr>
             <td>
@@ -18,9 +20,73 @@
            	<td> <input type="button" value="취소하기" class="payBtn" onclick="cancelBtnClick(${reservation.id})"/></td>
       		</tr>
         </c:forEach>
-    </table>
-    <script>
+    </table> --%>
     
+    <div class="nav">
+    <ul>
+        <li class="homeLeftFloat">
+            <a href="#">hyewon's Movie Reservation</a>
+        </li>
+        <li>
+            <a href="#" class="dropbtn" onclick="">logout</a>
+        </li>
+        <li>
+            <a href="#" class="dropbtn" onclick="">상영중인 영화</a>
+        </li>
+        <li>
+            <a href="cancelReservation" class="dropbtn" onclick="">예약내역/취소</a>
+        </li>
+        <li>
+            <a href="selectMovieTheaterDateTime" onclick="">예약</a>
+        </li>
+    </ul>
+</div>
+<br/><br/>
+
+<table style="width: 80%;" align="center">
+    <tr>
+        <th>영화</th>
+        <th>극장</th>
+        <th>날짜</th>
+        <th>룸</th>
+        <th>시간</th>
+        <th>좌석</th>
+        <th>가격</th>
+        <th>대기/예약</th>
+        <th>취소</th>
+    </tr>
+
+	<c:forEach var="reservationView" items="${listReservationView}" varStatus="status">
+      		<tr>
+            <%-- <td>${reservationView.movieName}</td> --%>
+            <td>${reservationView.reservationId}</td>
+            <td>${reservationView.theaterName}</td>
+            <td>${reservationView.date}</td>
+            <td>${reservationView.roomId}</td>
+            <td><span>${reservationView.startTime}~</span><span>${reservation.endTime}</span></td>
+            <td>${reservationView.seatId}</td>
+            <td>${reservationView.price}</td>
+            <td>${reservationView.waitOrder}</td>
+           	<td> <input type="button" value="취소하기" class="payBtn" onclick="cancelBtnClick(${reservationView.reservationId})"/></td>
+      		</tr>
+    </c:forEach>
+    <!-- <tr>
+        <td>캐리비안해적</td>
+        <td>강남</td>
+        <td>5/29</td>
+        <td>3관 8층</td>
+        <td>8:00</td>
+        <td>1A</td>
+        <td>10000</td>
+        <td>예약</td>
+        <td><a href="#">취소</a> </td>
+    </tr> -->
+</table>
+    
+    
+    
+    
+    <script>
    	 function cancelBtnClick(reservationId) {
    		alert(reservationId);
         window.location = "http://localhost:8080/movieReservation/cancelReservation?reservationId=" + reservationId;

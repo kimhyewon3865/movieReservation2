@@ -11,7 +11,9 @@
 			<property name="theaterDao" ref="theaterDao" />
 			<property name="scheduleDao" ref="scheduleDao"/>
 			<property name="reservationDao" ref="reservationDao"/>
+			<property name="seatDao" ref="seatDao"/>
 			<property name="reservationService" ref="reservationService"/>
+			<property name="reservationViewDao" ref="reservationViewDao"/>
 	</bean>
 	
 	

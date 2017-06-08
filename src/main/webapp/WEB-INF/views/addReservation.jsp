@@ -42,20 +42,31 @@
         <th>가격</th>
         <th>대기/예약</th>
     </tr>
-
+	<%-- <c:forEach var="seat" items="${listSeat}" varStatus="status">
+		<tr>
+			<td>${movieName}</td>
+		        <td>${theaterName }</td>
+		        <td>${selectedSchedule.date}</td>
+		        <td>${selectedSchedule.roomId}</td>
+		        <td>${selectedSchedule.startTime}</td>
+		        <td>${seat.seatId }</td>
+		        <td>${seat.price }</td>
+		        <td>예약</td>
+      	</tr>
+    </c:forEach> --%>
 	<% int[] seatIds = (int[])request.getAttribute("seatIds");
             for(int seatId: seatIds) { %>
              <tr>
 		        <td>${movieName}</td>
 		        <td>${theaterName }</td>
 		        <td>${selectedSchedule.date}</td>
-		        <td>3관 8층</td>
+		        <td>${selectedSchedule.roomId}</td>
 		        <td>${selectedSchedule.startTime}</td>
 		        <td><%=seatId%></td>
 		        <td>10000</td>
 		        <td>예약</td>
 		    </tr>
-            <% } %>
+            <% } %> 
 </table>
 
 

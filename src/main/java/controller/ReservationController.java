@@ -14,8 +14,12 @@ import movie.Reservation;
 import movie.ReservationDao;
 import movie.ReservationRequest;
 import movie.ReservationService;
+import movie.ReservationView;
+import movie.ReservationViewDao;
 import movie.Schedule;
 import movie.ScheduleDao;
+import movie.Seat;
+import movie.SeatDao;
 import movie.SelectionMovieTheaterDate;
 import movie.Theater;
 import movie.TheaterDao;
@@ -27,6 +31,8 @@ public class ReservationController {
 	private TheaterDao theaterDao;
 	private ScheduleDao scheduleDao; 
     private ReservationDao reservationDao;
+    private SeatDao seatDao;
+    private ReservationViewDao reservationViewDao;
     
 	private ReservationService reservationService;
 
@@ -51,6 +57,14 @@ public class ReservationController {
 		this.reservationDao = reservationDao;
 	}
 	
+	public void setSeatDao(SeatDao seatDao) {
+		this.seatDao = seatDao;
+	}
+	
+	public void setReservationViewDao(ReservationViewDao reservationViewDao) {
+		this.reservationViewDao = reservationViewDao;
+	}
+	
 	@RequestMapping("/")
     public String index(Model model) {
        
@@ -59,6 +73,8 @@ public class ReservationController {
 
 	@RequestMapping("/selectTest")
     public String selectTest(Model model) {
+		
+		
         List<Movie> listMovie = movieDao.selectAll();
         List<Theater> listTheater = theaterDao.selectAll();
         List<Schedule> listSchedule = scheduleDao.selectAll();
@@ -120,41 +136,51 @@ public class ReservationController {
 	
 	 @RequestMapping(value = "/addReservation", method = RequestMethod.POST)
 	   public String addReservation(ReservationRequest reservationRequest, Model model) {
-		  reservationService.reservate(reservationRequest);
-
-		  int scheduleId = reservationRequest.getScheduleId();
-		  
-		  
+		  reservationService.reservate(reservationRequest); //insert
+		  //request : scheduleid, userid, seatids
+		  //jsp에서 for 문 돌리는 객체는 없고 seatIds수만큼 돌
+		  //output data : 영화 극장 날짜 시간 좌석번호 가격 -> 반복: 영화 극장 날짜 시간/ 반복x: 좌석번호 가격 
+		  int scheduleId = reservationRequest.getScheduleId(); 
+		 		  
 		  model.addAttribute("scheduleId", scheduleId);
 		  model.addAttribute("userId", reservationRequest.getUserId());
 		  model.addAttribute("seatIds", reservationRequest.getSeatIds());
-		  
+
+		  // 반복 x 객체 
 		  Schedule selectedSchedule = scheduleDao.selectScheduleById(scheduleId);
-	        model.addAttribute("selectedSchedule", selectedSchedule);
-	        
-//	      String movieName = movieDao.selectMovieNameByMovieId(movie); //조
-//	      String theaterName = theaterDao.selectTheaterNameByTheaterId(theater);
-//	      model.addAttribute("movieName", movieName);
-//	      model.addAttribute("theaterName", theaterName);
-		  
-	      String movieName = scheduleDao.selectMovieNameByscheduleId(scheduleId);
-	      String theaterName = scheduleDao.selectTheaterNameByscheduleId(scheduleId);
-	      model.addAttribute("movieName", movieName);
+	      model.addAttribute("selectedSchedule", selectedSchedule);
+	      Movie selectedMovie = scheduleDao.selectMovieByScheduleId(scheduleId); //id 통해서 seat 객체 받아오기 위 
+	      String theaterName = scheduleDao.selectTheaterNameByscheduleId(scheduleId); 
+	      model.addAttribute("movieName", selectedMovie.getName());
 	      model.addAttribute("theaterName", theaterName);
 	      
+	      // 반복 객체 - seats? reservation? seat!!!
+	      int selectedRoomId = selectedSchedule.getRoomId();
+	      int selectedTheaterId = selectedSchedule.getTheaterId();
+	      
+//	      List<Seat> listSeat = seatDao.selectSeatByIdRoomIdTheaterId(reservationRequest.getSeatIds(), selectedRoomId, selectedTheaterId);
+	      //TODO: 예약한 Seat 객체 받아와 넘겨주기  
+	      List<Seat> listSeat = seatDao.selectSeatByIdRoomIdTheaterId(reservationRequest.getSeatIds(), 2, 2);//이부분에서 에러 
+	      System.out.println("listSeat: " + listSeat);
+	      model.addAttribute("listSeat", listSeat);
+	      
+//	      List<Integer> seatPrices = seatDao.selectSeatPriceByIdsRoomIdTheaterId(reservationRequest.getSeatIds(), roomId, theaterId);
+//	      model.addAttribute("seatPrices", seatPrices);
+//	      
 	      return "addReservation";
 	   }
 	 
 	 @RequestMapping("/reservationHistoryCancel")
-	 public String reservationHistoryCancel(Model model) {
-	        List<Reservation> listReservation = (List<Reservation>) reservationDao.selectByUserId("abc");
-	        model.addAttribute("listReservation", listReservation);
-	        
+	 public String reservationHistoryCancel(Model model) {		
+			List<ReservationView> listReservationView = reservationViewDao.selectByUserId("abc");
+			model.addAttribute("listReservationView", listReservationView);
+	       
 	        return "reservationHistoryCancel";
-	 }
+	 }	 
 	 
 	 @RequestMapping("/cancelReservation")
 	 public String cancelReservation(Model model, @RequestParam(value="reservationId", required=false) Long reservationId) {
+		 reservationDao.update(reservationId);
 		 reservationDao.deleteReservation(reservationId);
 		 return "reservationHistoryCancel";
 	 }
