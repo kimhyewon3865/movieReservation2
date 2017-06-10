@@ -33,5 +33,17 @@ public class TheaterDao {
 	    	String name = jdbcTemplate.queryForObject(query, String.class);
 	    	return name;
 	    }
+	    
+	    public List<Theater> selectByMovieId(int movieId) {
+	        List<Theater> results = jdbcTemplate.query("SELECT distinct t.id, t.name, t.location FROM theater t, schedule s where  s.theaterId = t.id and movieId = ?", new RowMapper<Theater>() {
+	                    @Override
+	                    public Theater mapRow(ResultSet rs, int rowNum) throws SQLException {
+	                    	Theater theater = new Theater(rs.getString("name"), rs.getString("location"));
+	                    	theater.setId(rs.getInt("id"));
+	                        return theater;
+	                    }
+	                }, movieId);
+	        return results;
+	    }
 }
 

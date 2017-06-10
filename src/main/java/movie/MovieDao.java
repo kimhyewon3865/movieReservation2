@@ -23,7 +23,8 @@ public class MovieDao {
 	        List<Movie> results = jdbcTemplate.query("select * from movie", new RowMapper<Movie>() {
 	                    @Override
 	                    public Movie mapRow(ResultSet rs, int rowNum) throws SQLException {
-	                        Movie movie = new Movie(rs.getString("name"), rs.getInt("grade"), rs.getString("genre"), rs.getString("nation"), rs.getString("viewingTime"), rs.getDate("releaseDate"), rs.getString("director"));
+	                    	
+	                        Movie movie = new Movie(rs.getString("name"), rs.getInt("grade"), rs.getString("genre"), rs.getString("nation"), rs.getString("viewingTime"), rs.getString("releaseDate"), rs.getString("director"));
 	                        movie.setId(rs.getInt("id"));
 	                        return movie;
 	                    }

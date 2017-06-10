@@ -5,13 +5,13 @@ import java.sql.Date;
 public class Schedule {
 	int id;
     int movieId;
-    Date date;
+    String date;
     String startTime;
     String endTime;
     int theaterId;
     int roomId;
     
-    public Schedule(int movieId, Date date, String startTime, String endTime, int theaterId, int roomId) {
+    public Schedule(int movieId, String date, String startTime, String endTime, int theaterId, int roomId) {
     	this.movieId = movieId;
     	this.date = date;
     	this.startTime = startTime;
@@ -36,11 +36,11 @@ public class Schedule {
 		this.movieId = movie;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

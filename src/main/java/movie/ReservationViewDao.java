@@ -23,7 +23,7 @@ public class ReservationViewDao {
         List<ReservationView> results = jdbcTemplate.query(query, new RowMapper<ReservationView>() {
                     @Override
                     public ReservationView mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    	ReservationView reservationView = new ReservationView(rs.getInt("reservationId"), rs.getString("movieName"), rs.getString("theaterName"), rs.getDate("date"), rs.getInt("roomId"), rs.getString("startTime"), rs.getString("endTime"), rs.getInt("seatId"), rs.getInt("price"), rs.getInt("waitOrder"), rs.getString("userId"));
+                    	ReservationView reservationView = new ReservationView(rs.getInt("reservationId"), rs.getString("movieName"), rs.getString("theaterName"), rs.getString("date"), rs.getInt("roomId"), rs.getString("startTime"), rs.getString("endTime"), rs.getInt("seatId"), rs.getInt("price"), rs.getInt("waitOrder"), rs.getString("userId"));
                         return reservationView;
                     }
                 }, userId);
@@ -37,7 +37,7 @@ public class ReservationViewDao {
             List<ReservationView> results = jdbcTemplate.query(query, new RowMapper<ReservationView>() {
                         @Override
                         public ReservationView mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        	ReservationView reservationView = new ReservationView(rs.getInt("reservationId"), rs.getString("movieName"), rs.getString("theaterName"), rs.getDate("date"), rs.getInt("roomId"), rs.getString("startTime"), rs.getString("endTime"), rs.getInt("seatId"), rs.getInt("price"), rs.getInt("waitOrder"), rs.getString("userId"));
+                        	ReservationView reservationView = new ReservationView(rs.getInt("reservationId"), rs.getString("movieName"), rs.getString("theaterName"), rs.getString("date"), rs.getInt("roomId"), rs.getString("startTime"), rs.getString("endTime"), rs.getInt("seatId"), rs.getInt("price"), rs.getInt("waitOrder"), rs.getString("userId"));
                             return reservationView;
                         }
                     }, scheduleId, userId, seatId);

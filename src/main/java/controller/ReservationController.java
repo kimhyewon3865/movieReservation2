@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import movie.Movie;
 import movie.MovieDao;
@@ -84,6 +85,7 @@ public class ReservationController {
 //        model.addAttribute("seatIdList", seatIdList);
         List<Integer> seatWaitOrderList = reservationDao.selectSeatWaitOrdersByScheduleIdRoomIdTheaterId(8, 2, 2);
         model.addAttribute("seatWaitOrderList", seatWaitOrderList);
+        /////remove
         
         model.addAttribute("listMovie", listMovie);
         model.addAttribute("listTheater", listTheater);
@@ -149,6 +151,49 @@ public class ReservationController {
 	      
 	      return "addReservation";
 	   }
+	 
+	 @RequestMapping(value= "/selectMovie.do", method=RequestMethod.GET)
+	 public ModelAndView AjaxView( @RequestParam("movieId") Integer movieId)  {  
+	     ModelAndView mav= new ModelAndView();
+	     //필요없을 	     
+	     Schedule schedule = scheduleDao.selectByMovieId(movieId);
+	     mav.addObject("schedule", schedule);
+	     
+	     //필요없을
+	     List<Schedule> schedules = scheduleDao.selectSchedulesByMovieId(movieId);
+	     mav.addObject("schedules", schedules);
+	     //필요없을
+	     List<String> theaterNames = scheduleDao.selectTheaterNamesByMovieId(movieId);
+	     mav.addObject("theaterNames", theaterNames);
+	     
+	     List<Theater> theaters = theaterDao.selectByMovieId(movieId);
+	     mav.addObject("theaters", theaters);
+	     
+	     mav.setViewName("jsonView");
+	     
+	     
+	     
+	     
+	     return mav;
+	 }
+	 
+	 @RequestMapping(value= "/selectTheater.do", method=RequestMethod.GET)
+	 public ModelAndView AjaxView2( @RequestParam("theaterId") Integer theaterId, @RequestParam("movieId") Integer movieId)  {  
+	     ModelAndView mav= new ModelAndView();
+
+	     //필요없을
+	     List<Schedule> schedules = scheduleDao.selectTheaterNamesByMovieIdTheaterId(movieId, theaterId);
+	     mav.addObject("schedules", schedules);
+	     
+	     
+	     mav.setViewName("jsonView");
+	     
+	     
+	     
+	     
+	     return mav;
+	 }
+
 	 
 	 @RequestMapping("/reservationHistoryCancel")
 	 public String reservationHistoryCancel(Model model) {		

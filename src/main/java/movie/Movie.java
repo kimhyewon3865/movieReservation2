@@ -9,10 +9,10 @@ public class Movie {
     private  String genre;
     private String nation;
     private String viewingTime;
-    private Date releaseDate;
+    private String releaseDate;
     private String director;
 
-    public Movie(String name, int grade, String genre, String nation, String viewingTime, Date releaseDate, String director) {
+    public Movie(String name, int grade, String genre, String nation, String viewingTime, String releaseDate, String director) {
         this.name = name;
         this.grade = grade;
         this.genre = genre;
@@ -21,6 +21,7 @@ public class Movie {
         this.releaseDate = releaseDate;
         this.director = director;
     }
+
 
 
 	public int getId() {
@@ -71,11 +72,11 @@ public class Movie {
         this.viewingTime = viewingTime;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 

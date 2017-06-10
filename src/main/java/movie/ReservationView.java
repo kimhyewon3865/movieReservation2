@@ -7,7 +7,7 @@ public class ReservationView {
 	int reservationId;
 	String movieName;
 	String theaterName;
-	Date date;
+	String date;
 	int roomId;
 	String startTime;
 	String endTime;
@@ -16,7 +16,7 @@ public class ReservationView {
 	int waitOrder;
 	String userId;
 	
-	public ReservationView(int reservationId, String movieName, String theaterName, Date date, int roomId, String startTime, String endTime,
+	public ReservationView(int reservationId, String movieName, String theaterName, String date, int roomId, String startTime, String endTime,
 			int seatId, int price, int waitOrder, String userId) {
 		super();
 		this.reservationId = reservationId;
@@ -49,10 +49,10 @@ public class ReservationView {
 	public void setTheaterName(String theaterName) {
 		this.theaterName = theaterName;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	
