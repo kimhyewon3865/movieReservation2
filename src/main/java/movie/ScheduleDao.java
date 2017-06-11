@@ -133,4 +133,16 @@ public class ScheduleDao {
         }, movieId, theaterId);
         return results;
     }
+    
+    public List<Schedule> selectTheaterNamesByMovieIdTheaterIdDate(int movieId, int theaterId, String date) {
+        List<Schedule> results = jdbcTemplate.query("select * from schedule where movieId = ? and theaterId = ? and date = ?", new RowMapper<Schedule>() {
+            @Override
+            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+            	Schedule schedule = new Schedule(rs.getInt("movieId"), rs.getString("date"), rs.getString("startTime"), rs.getString("endTime"), rs.getInt("theaterId"), rs.getInt("roomId"));                    			
+            	schedule.setId(rs.getInt("id"));
+                return schedule;
+            }
+        }, movieId, theaterId, date);
+        return results;
+    }
 }

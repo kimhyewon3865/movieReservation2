@@ -57,7 +57,7 @@
     </tr>
 
 	<c:forEach var="reservationView" items="${listReservationView}" varStatus="status">
-      		<tr>
+      		<tr class="reservationView-list">
             <%-- <td>${reservationView.movieName}</td> --%>
             <td>${reservationView.reservationId}</td>
             <td>${reservationView.theaterName}</td>
@@ -67,20 +67,10 @@
             <td>${reservationView.seatId}</td>
             <td>${reservationView.price}</td>
             <td>${reservationView.waitOrder}</td>
-           	<td> <input type="button" value="취소하기" class="payBtn" onclick="cancelBtnClick(${reservationView.reservationId})"/></td>
+
+           	<td> <input type="button" id="cancelButton${reservationView.reservationId}" class="payBtn" onclick="cancelBtnClick(${reservationView.reservationId})" value="취소하기${reservationView.reservationId}"></td>
       		</tr>
     </c:forEach>
-    <!-- <tr>
-        <td>캐리비안해적</td>
-        <td>강남</td>
-        <td>5/29</td>
-        <td>3관 8층</td>
-        <td>8:00</td>
-        <td>1A</td>
-        <td>10000</td>
-        <td>예약</td>
-        <td><a href="#">취소</a> </td>
-    </tr> -->
 </table>
     
     
@@ -89,7 +79,26 @@
     <script>
    	 function cancelBtnClick(reservationId) {
    		alert(reservationId);
-        window.location = "http://localhost:8080/movieReservation/cancelReservation?reservationId=" + reservationId;
+        //window.location = "http://localhost:8080/movieReservation/cancelReservation?reservationId=" + reservationId;
+        alert(event.srcElement.id);
+        
+        /* $(document).ready(function() { */
+            $("#"+event.srcElement.id).click(function(){
+                alert("button");
+            }); 
+        /* }); */
+        
+        /* $("#cancelButton"+reservationId).click(function () {
+        	alert("1");
+            
+        });
+        $(function() {
+        	$("#cancelButton5").click(function () {
+        		alert("cancelButton5!!!");
+        	})
+        }); */
+        
+        
    	 }
 
     </script>

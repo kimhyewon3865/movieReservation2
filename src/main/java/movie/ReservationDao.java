@@ -52,7 +52,7 @@ public class ReservationDao {
         return results;
     }
     
-    public void deleteReservation(Long id) {
+    public void deleteReservation(int id) {
         String deleteStatement = "DELETE FROM reservation WHERE id=?";
         jdbcTemplate.update(deleteStatement, id);
     }
@@ -85,7 +85,7 @@ public class ReservationDao {
     	return waitOrders;
     }
     
-    public List<Integer> selectReservationIdsByScheduleIdSeatId(Long reservationId) {
+    public List<Integer> selectReservationIdsByScheduleIdSeatId(int reservationId) {
     	List<Integer> results = jdbcTemplate.query("select r2.id from reservation r1, reservation r2 where r1.scheduleId = r2.scheduleId and r1.seatId = r2.seatId and r1.id = ? and r2.id != ?;", new RowMapper<Integer>() {
             @Override
             public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -96,7 +96,7 @@ public class ReservationDao {
     }
     
     
-    public void update(Long reservationId) {
+    public void update(int reservationId) {
     	List<Integer> reservationIds = selectReservationIdsByScheduleIdSeatId(reservationId);
     	
     	String waitOrderQuery = "select waitOrder from reservation where id = " + reservationId;

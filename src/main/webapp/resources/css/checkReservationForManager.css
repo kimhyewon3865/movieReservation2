@@ -1,0 +1,35 @@
+@CHARSET "UTF-8";
+
+.lists {
+	display: -webkit-flex;
+    display: flex;
+     width: 80%;
+    margin-left: 10%;
+	float: left;
+    height: 15%;
+    background-color: #458dcc;
+}
+
+.movie-list {
+	/* width: 100px; */
+	flex: 1;
+	/* background-color: cornflowerblue; */
+}
+
+.theater-list {
+/* 	width: 100px; */
+	flex: 1;
+	/* background-color: yellow; */
+}
+
+.date-list {
+	/* width: 100px; */
+	flex: 1;
+	/* background-color: #458dcc; */
+}
+
+.searchButton {
+	margin-top: 10px;
+	width: 100px;
+	height: 100%;
+}

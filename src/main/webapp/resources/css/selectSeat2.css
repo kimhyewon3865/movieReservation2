@@ -1,7 +1,130 @@
 @CHARSET "UTF-8";
 
-html, body {height: 100%}
-body { position:relative;}
+@CHARSET "UTF-8";
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+/* navi */
+.nav {
+    background-color: hotpink;
+    width: 100%;
+    height: 50px;
+}
+
+.nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
+}
+
+.nav li {
+    float: right;
+    height: 100%;
+}
+
+.nav li a, .dropbtn {
+    display: inline-block;
+    color: #555459;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.nav li a:hover, .dropdown:hover .dropbtn {
+    background: rgba(102, 152, 200, 0.5);
+}
+
+.nav .homeLeftFloat {
+    float: left;
+}
+
+
+li {
+    list-style-type: none;
+}
+/* person_screen */
+.content .person_screen {
+    /* width: 100%; */
+    height: 25%;
+    background-color: red;
+}
+
+.content .person_screen .numberofpeople-select {
+    width: 30%;
+    height: 100%;
+    float: left;
+    border: 1px solid black;
+    background-color: lightgoldenrodyellow;
+    
+    margin-left: 18%;
+}
+
+.person_screen .section-screen-select  {
+    width: 30%;
+    height: 100%;
+    float: right;
+    border: 1px solid black;
+    background-color: lightgoldenrodyellow;
+    margin-right: 18%;
+}
+
+/* seatinformation */
+.seatinformation {
+    width: 100%;
+    height: 480px;
+    background-color: orange;
+}
+
+
+.seatinformation .theater {
+    width: 80%;
+    height: 100%;
+    float: left;
+    left: 39%;
+    position:absolute;
+}
+
+
+/* btn */
+.btn {
+	background-color: blue;
+}
+
+.payBtn {
+    width: 200px;
+    height: 50px;
+    background-color: darkorange;
+    float: right;
+    margin-right: 30px;
+}
+
+.backBtn {
+width: 200px;
+height: 50px;
+background-color: darkorange;
+float: left;
+margin-left: 30px;
+}
+
+/* else */
+
+.theater {
+    margin: 20px auto;
+    max-width: 300px;
+}
+
+.theater_room {
+    border-right: 5px solid #d8d8d8;
+    border-left: 5px solid #d8d8d8;
+}
 
 ol {
     list-style: none;
@@ -9,65 +132,8 @@ ol {
     margin: 0;
 }
 
-li {
-    list-style-type: none;
-}
-.content {
-	height: 100%;
-	width: 100%;
-	background-color: blue;
-}
-
-/* .reservation-information */
-.reservation-information {
-	height: 20%;
-	width: 100%;
-	margin-top: 10px;
-	background-color: red;
-}
-
-.seatcount {
-	margin-left: 10%;
-	float: left;
-	height: 100%;
-	width: 35%;
-	background-color: green;
-}
-
-.schedule {
-	margin-right: 10%;
-	float: right;
-	height: 100%;
-	width: 35%;
-	background-color: green;
-}
-
-/* .seat-information */
-.seat-information {
-	height: 60%;
-	width: 100%;
-	margin-top: 10px;
-	background-color: orange;
-}
-
-.seat-table {
-	margin-left: 10%;
-	float: left;
-	height: 100%;
-	width: 60%;
-	background-color: white;
-}
-
-.seat-type {
-	margin-right: 10%;
-	float: right;
-	height: 100%;
-	width: 10%;
-	background-color: aqua;
-}
-
 .seats {
-	display: flex;
+    display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -75,15 +141,14 @@ li {
 
 .seat {
     display: flex;
-    /* flex: 0 0 14.28571428571429%; */
-    flex: 1;
+    flex: 0 0 14.28571428571429%;
     padding: 5px;
     position: relative;
 }
-/* 
+
 .seat:nth-child(3) {
     margin-right: 14.28571428571429%;
-} */
+}
 
 .seat input[type=checkbox] {
     position: absolute;
@@ -97,7 +162,6 @@ li {
     animation-duration: 300ms;
     animation-fill-mode: both;
 }
-
 .seat input[type=checkbox]:disabled + label {
     background: #dddddd;
     text-indent: -9999px;
@@ -116,7 +180,6 @@ li {
     box-shadow: none;
     cursor: not-allowed;
 }
-
 .seat label {
     display: block;
     position: relative;
@@ -130,7 +193,6 @@ li {
     animation-duration: 300ms;
     animation-fill-mode: both;
 }
-
 .seat label:before {
     content: "";
     position: absolute;
@@ -179,25 +241,6 @@ li {
     }
 }
 
-.seat_able label {
-    display: block;
-    position: relative;
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 1.5rem;
-    padding: 4px 0;
-    background: deepskyblue;
-    border-radius: 5px;
-    animation-duration: 300ms;
-    animation-fill-mode: both;
-}
-
-.seat_wait label {
-    background: #bada55;
-}
-
 @keyframes rubberBand {
     0% {
         -webkit-transform: scale3d(1, 1, 1);
@@ -233,29 +276,40 @@ li {
     animation-name: rubberBand;
 }
 
-/* .button-information */
-.button-information {
-	height: 10%;
-	width: 100%;
-	margin-top: 10px;
-	background-color: yellow;
+
+
+
+
+.seat-type {
+    width: 100px;
+    height: 40%;
+    float: right;
+    right: 30%;
+    position:absolute;
+    margin-top: 20px;
+    background-color: lightgoldenrodyellow;
 }
 
-.backButton {
-	margin-left: 10%;
-	float: left;
-	height: 50%;
-	width: 20%;
-	background-color: purple;
+.seat-type p {
+    text-align: center;
 }
 
-.payButton {
-	margin-top: 10px;
-	margin-right: 10%;
-	float: right;
-	height: 50px;
-	width: 20%;
-	background-color: purple;
+.seat_able label {
+    display: block;
+    position: relative;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.5rem;
+    padding: 4px 0;
+    background: deepskyblue;
+    border-radius: 5px;
+    animation-duration: 300ms;
+    animation-fill-mode: both;
 }
 
+.seat_wait label {
+    background: #bada55;
+}
 

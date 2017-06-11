@@ -5,35 +5,51 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="<c:url value="/resources/css/selectSchedule.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/navigation.css" />" rel="stylesheet">
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js'></script>
     <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
-<!-- <form action="selectSeatTest" method="post"> -->
-<%--  <h3>좌석대기테스트  </h3>
-     <ul>
+<div class="nav">
+	    <ul>
+	        <li class="homeLeftFloat">
+	            <a href="#">hyewon's Movie Reservation</a>
+	        </li>
+	        <li>
+	            <a href="#" class="dropbtn" onclick="">logout</a>
+	        </li>
+	        <li>
+	            <a href="#" class="dropbtn" onclick="">상영중인 영화</a>
+	        </li>
+	        <li>
+	            <a href="reservationHistoryCancel" class="dropbtn" onclick="">예약내역/취소</a>
+	        </li>
+	        <li>
+	            <a href="selectTest" onclick="">예약</a>
+	        </li>
+	    </ul>
+	</div>
+ 	
+ 	<br/>
 
-      <c:forEach var="seatWaitOrder" items="${seatWaitOrderList}" varStatus="status">
-            <li>
-            <label><input type="radio" 
-					              name="seatWaitOrder" value="${seatWaitOrder}" >
-						${seatWaitOrder}</label>
-           	</li>
-        </c:forEach>
-    </ul>  --%>
-<h3>영화 </h3>
-     <ul>
+	<div class="list-div">
+	<h3>영화 </h3>
+	
+     <ul id="movie-list">
       <c:forEach var="movie" items="${listMovie}" varStatus="status">
-            <li onclick="setSelectedMovie(${movie.id})" id="movie${movie.id}">
+            <li class="movieLi" onclick="setSelectedMovie(${movie.id})" id="movie${movie.id}">
             <label><input type="radio" 
 					              name="movieResponse" value="${movie.name}" >
 						${movie.name}</label>
            	</li>
         </c:forEach>
     </ul>
+    </div>
  
+ 	<div class="list-div">
      <h3>영화관 </h3>
       <ul id="theater-list">
       <c:forEach var="theater" items="${ listTheater }" varStatus="status">
@@ -44,17 +60,9 @@
            	</li>
         </c:forEach>
     </ul>
+    </div>
     
-    <%-- <h3>시간표- date </h3>
-    <ul>
-    	<c:forEach var="schedule" items="${ listSchedule }" varStatus="status">
-            <li>
-            	<input type="radio" name="schedule_Date" id="schedule_Date1" onclick="">
-                <label for="schedule_Date1"> ${schedule.date}</label>
-           	</li>
-        </c:forEach>
-    </ul>  --%>
-    
+    <div class="list-div">
     <h3>날짜 - date </h3>
     <ul id="date-list">
     	<c:forEach var="schedule" items="${ listSchedule }" varStatus="status">
@@ -67,11 +75,13 @@
            	</li>
         </c:forEach>
     </ul> 
+    </div>
     
+    <div class="list-div">
     <h3>시간표- room, time </h3>
-    <ul id="time-list">
+    <ul id="schedule-list">
     	<c:forEach var="schedule" items="${ listSchedule }" varStatus="status">
-            <li class="timeLi" onclick="setSelectedScheduleId(${status.index})">
+            <li class="scheduleLi" onclick="setSelectedScheduleId(${status.index})">
             	<input type="radio" name="scheduleId" id="schedule_Room1" onclick="">
                 <label for="schedule_Room1"> ${schedule.id}
                 	<span>${schedule.date}</span>
@@ -80,25 +90,21 @@
            	</li>
         </c:forEach>
     </ul> 
+    </div>
     
-	<!-- <input type="submit" value="주문완료"> -->
-    
-	<!-- </form> -->
 	<input type="button" value="조회하기" class="searchSeatBtn" onclick="selectSeatClick()"/>
 	
 	<script>	
 	var selectedMovieId = 0;
     var selectedTheaterId = 0;
-    /* var selectedDate = "";
-    var selectedRoomId = 0;
-    var selectedTime = 0; */
+    var selectedDate = "";
 	var selectedScheduleId = 0;
     
     function setSelectedMovie(movieId) {
         selectedMovieId = movieId;
         
        	$("#movie"+movieId).click(function () {
-        	/* $("#movie"+movieId).removeAttr("style"); */
+        	$(".movieLi").removeAttr("style");
             $(this).css("background-color", "lightblue");
             
             $.ajax({
@@ -114,7 +120,7 @@
                     var html = '';
                     for( i in theaters) {
                     	//TODO: 한글 깨짐
-                    	html += '<li class = "theaterLi" onclick="setSelectedTeahterId(' + theaters[i].id + ') id=theater' + theaters[i].id + '">';
+                    	html += '<li class = "theaterLi" onclick="setSelectedTeahterId(' + theaters[i].id + ')" id="theater' + theaters[i].id + '">';
                    		html += '<label><input type="radio" name="theaterId" value="' + theaters[i].name + '" >'+ theaters[i].name +'</label>';
                 		html += '</li>'; 
                     }
@@ -128,88 +134,81 @@
     function setSelectedTeahterId(theaterId) {
         selectedTheaterId = theaterId;
         
-        
+        $("#theater"+theaterId).click(function () {
+        	$(".theaterLi").removeAttr("style");
+            $(this).css("background-color", "lightblue");
+            
+            $.ajax({
+                url : "http://localhost:8080/movieReservation/selectTheater.do",
+                type: "get",
+                data : { "movieId" : selectedMovieId, "theaterId": theaterId },
+                success : function(responseData){
+           	     	var schedules = responseData.schedules;
+           	     	
+                    $("#ajax").remove();
+                    $(".dateLi").remove(); //필수
+                   	
+                    var html = '';
+                    for( i in schedules) {
+                    	//TODO: 한글 깨짐
+                    	html += '<li class = "dateLi" onclick="setSelectedDate(\'' + schedules[i].date + '\', ' + i + ')" id="date' + i + '">';
+                   		html += '<label><input type="radio" name ="dateId" value="\'' + schedules[i].date + '\'" >'+ schedules[i].date +'</label>';
+                		html += '</li>'; 
+                    }
+                    $("#date-list").after(html);
+                }
+            }); 
+        });
         
     }
-
-/*     function setSelectedDate(date) {
-        selectedDate = date;
-    } */
-
-   /*  function setSelectedRoomIdTime(roomId, time) {
-        selectedRoomId = roomId;
-        selectedTime = time;
-    } */
-    function setSelectedDate(date) {
+    
+    function setSelectedDate(date, i) {
+    	selectedDate = date;
+    	
+    	$("#date"+i).click(function () {
+        	$(".dateLi").removeAttr("style");
+            $(this).css("background-color", "lightblue");
+            
+            $.ajax({
+                url : "http://localhost:8080/movieReservation/selectDate.do",
+                type: "get",
+                data : { "movieId" : selectedMovieId, "theaterId": selectedTheaterId, "date" : date },
+                success : function(responseData){
+           	     	var schedules = responseData.schedules;
+           	     		
+                    $("#ajax").remove();
+                    
+                    $(".scheduleLi").remove(); //필수
+                    
+                    var html = '';
+                    for( i in schedules) {
+                    	//TODO: 한글 깨짐
+                    	html += '<li class = "scheduleLi" onclick="setSelectedSchedule(' + schedules[i].id + ')" id="schedule' + schedules[i].id + '">';
+                   		html += '<label><input type="radio" name="scheduleId" value="' + schedules[i].id + '" >'+ schedules[i].id +'</label>';
+                		html += '</li>'; 
+                    }
+                    $("#schedule-list").after(html);
+                }
+            }); 
+        });
+    	
     	
     }
     
-    function setSelectedScheduleId(scheduleId) {
+    function setSelectedSchedule(scheduleId) {
     	selectedScheduleId = scheduleId;
+    	$("#schedule"+scheduleId).click(function () {
+        	$(".scheduleLi").removeAttr("style");
+            $(this).css("background-color", "lightblue");
+    	});
     }
 
     function selectSeatClick() {
-       /*  window.location = "http://localhost:8080/selectSeat?movie=" + selectedMovieId + "&theater=" + selectedTheaterId + "&date=" + selectedDate
-        + "&room=" + selectedRoomId + "&time=" + selectedTime ; */
     	 window.location = "http://localhost:8080/movieReservation/selectSeatTest?movie=" + selectedMovieId + "&theater=" + selectedTheaterId + "&schedule=" + selectedScheduleId;
     }
     
-    /* $("#movie").bind("click",function() {
-    	alert("hi");
-        $.ajax({
-            url : "movieReservation/selectTest2",
-            type: "get",
-            data : { "movieId" : selectedMovieId },
-            success : function(data) {
-                $("#ajax").remove();
-                alert(data);
-            },
-            error : function(request, status, error) {
-                if (request.status != '0') {
-                 alert("code : " + request.status + "\r\nmessage : "
-                   + request.reponseText + "\r\nerror : " + error);
-                }
-               }
-        });
-    }) */
     
-    
-    function test(movieId) {
-    	/* $("#movie"+movieId).bind("click",function(){
-            $.ajax({
-                url : "movieReservation/selectTest2",
-                type: "get",
-                data : { "movieId" : movieId },
-                success : function(data){
-                    $("#ajax").remove();
-                    alert(data);
-                    /* if(!data){
-                        alert("존재하지 않는 ID입니다");
-                        return false;
-                    } */
-                    /* var html = '';
-                    html += '<form class="form-signin" action="" id="ajax">';
-                    html += '이름<input type="text" class="form-control"  name="name" value="'+data.name+'">';
-                    html += '아이디<input type="text" class="form-control" name=id" value="'+data.id+'">';
-                    html += '이메일<input type="text" class="form-control"  name="email" value="'+data.email+'">';
-                    html += '비밀번호<input type="text" class="form-control" name="password" value="'+data.password+'">';
-                    html += '</form>';
-                    $("#container").after(html);
-                }
-                error : function(request, status, error) {
-                    if (request.status != '0') {
-                     alert("code : " + request.status + "\r\nmessage : "
-                       + request.reponseText + "\r\nerror : " + error);
-                    }
-                   }
-
-                
-            });
-
-        }); */
-    }
-    
-    
-	</script>
+ 
+    	</script>
 </body>
 </html>

@@ -145,10 +145,11 @@ public class ReservationController {
 		  model.addAttribute("scheduleId", scheduleId);
 		  model.addAttribute("userId", reservationRequest.getUserId());
 		  model.addAttribute("seatIds", reservationRequest.getSeatIds());
-
+		  System.out.println("test1 : " + scheduleId + " " + reservationRequest.getUserId() + " " + reservationRequest.getSeatIds());
 	      List<ReservationView> listReservationView = reservationViewDao.selectByScheduleIdUserIdSeatIds(scheduleId, reservationRequest.getUserId(), reservationRequest.getSeatIds());
+	      System.out.println("test2 : " + listReservationView);
 	      model.addAttribute("listReservationView", listReservationView);
-	      
+	      System.out.println("test3 : ");
 	      return "addReservation";
 	   }
 	 
@@ -170,10 +171,6 @@ public class ReservationController {
 	     mav.addObject("theaters", theaters);
 	     
 	     mav.setViewName("jsonView");
-	     
-	     
-	     
-	     
 	     return mav;
 	 }
 	 
@@ -181,18 +178,49 @@ public class ReservationController {
 	 public ModelAndView AjaxView2( @RequestParam("theaterId") Integer theaterId, @RequestParam("movieId") Integer movieId)  {  
 	     ModelAndView mav= new ModelAndView();
 
-	     //필요없을
 	     List<Schedule> schedules = scheduleDao.selectTheaterNamesByMovieIdTheaterId(movieId, theaterId);
 	     mav.addObject("schedules", schedules);
-	     
-	     
 	     mav.setViewName("jsonView");
-	     
-	     
-	     
-	     
+
 	     return mav;
 	 }
+	 
+	 @RequestMapping(value= "/selectDate.do", method=RequestMethod.GET)
+	 public ModelAndView AjaxView3( @RequestParam("theaterId") Integer theaterId, @RequestParam("movieId") Integer movieId, @RequestParam("date") String date)   {  
+	     ModelAndView mav= new ModelAndView();
+
+	     List<Schedule> schedules = scheduleDao.selectTheaterNamesByMovieIdTheaterIdDate(movieId, theaterId, date);
+	     mav.addObject("schedules", schedules);
+	     mav.setViewName("jsonView");
+
+	     return mav;
+	 }
+	 
+	 @RequestMapping(value= "/cancel.do", method=RequestMethod.GET)
+	 public ModelAndView AjaxView4(@RequestParam("reservationId") Integer reservationId)   {  
+	     ModelAndView mav = new ModelAndView();
+	     System.out.println("reservationId : " + reservationId);
+	     reservationDao.update(reservationId);
+	     System.out.println("update success!!");
+		 reservationDao.deleteReservation(reservationId);
+		 System.out.println("delete success!!");
+	     List<ReservationView> reservationViews = reservationViewDao.selectByReservationId(reservationId);
+	     System.out.println("dao success!!" + reservationViews);
+	     mav.addObject("reservationViews", reservationViews);
+//	     List<Schedule> schedules = scheduleDao.selectTheaterNamesByMovieIdTheaterIdDate(movieId, theaterId, date);
+//	     mav.addObject("schedules", schedules);
+	     mav.setViewName("jsonView");
+
+	     return mav;
+	 }
+	 
+	 @RequestMapping("/checkReservationForManager")
+	 public String checkReservationForManager(Model model) {		
+	       
+	        return "checkReservationForManager";
+	 }	
+
+	 
 
 	 
 	 @RequestMapping("/reservationHistoryCancel")
@@ -204,9 +232,14 @@ public class ReservationController {
 	 }	 
 	 
 	 @RequestMapping("/cancelReservation")
-	 public String cancelReservation(Model model, @RequestParam(value="reservationId", required=false) Long reservationId) {
+	 public String cancelReservation(Model model, @RequestParam(value="reservationId", required=false) Integer reservationId) {
 		 reservationDao.update(reservationId);
 		 reservationDao.deleteReservation(reservationId);
 		 return "reservationHistoryCancel";
 	 }
+	 
+	 @RequestMapping("/signUpSignIn")
+	 public String signUpSignIn(Model model) {		
+	        return "signUpSignIn";
+	 }	 
 }

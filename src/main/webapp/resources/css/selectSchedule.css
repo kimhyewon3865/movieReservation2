@@ -1,0 +1,118 @@
+@CHARSET "UTF-8";
+
+h3 {
+    background-color: yellowgreen;
+    margin: 10px;
+    text-align: center;
+    overflow:scroll;
+}
+
+.list-div {
+	height: 300px;
+    float: left;
+    width: 23%;
+}
+
+/* movie */
+.movie-list  li  {
+    margin: 5px;
+    list-style-type: none;
+}
+.movie-list input {
+    visibility:hidden;
+}
+.movie-list input:checked + label {
+    background: red;
+}
+.movie-list label {
+    cursor: pointer;
+}
+
+
+
+/* theater */
+.theater-list li  {
+    margin: 5px;
+    list-style-type: none;
+}
+.theater-list input {
+    visibility:hidden;
+}
+
+.theater-list label {
+    cursor: pointer;
+}
+
+.theater-list input:checked + label {
+    background: red;
+}
+
+/* date */
+/* .section-date .col-body {
+    overflow:scroll;
+}
+ */
+.date-list li {
+    list-style-type: none;
+}
+
+.date-list input {
+    visibility:hidden;
+}
+
+.date-list label {
+    cursor: pointer;
+}
+
+.date-list input:checked + label {
+    background: red;
+}
+
+/* schedule */
+.section-time .col-body {
+    overflow:scroll;
+}
+.schedule-list li {
+    list-style-type: none;
+}
+
+.schedule-list input {
+    visibility:hidden;
+}
+
+.schedule-list label {
+    cursor: pointer;
+}
+
+.schedule-list input:checked + label {
+    background: red;
+}
+
+/* button */
+.searchSeatBtn {
+    width: 200px;
+    height: 50px;
+    background-color: darkorange;
+    float: right;
+    margin-right: 10px;
+}
+
+/* else -  수정되야함  */
+.select-movie-theater-date-time-Section {
+    height: 580px;
+}
+
+.section .col-body {
+    background-color: lightgoldenrodyellow;
+    margin: 10px;
+    line-height: 1.8;
+    height: 500px;
+    overflow:scroll;
+}
+
+
+
+
+
+
+
