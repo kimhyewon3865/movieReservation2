@@ -8,6 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="<c:url value="/resources/css/navigation.css" />" rel="stylesheet">
 <link href="<c:url value="/resources/css/reservationHistoryCancel.css" />" rel="stylesheet">
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js'></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -44,7 +47,7 @@
 <br/><br/>
 
 <table style="width: 80%;" align="center">
-    <tr>
+    <tr class="table-header">
         <th>영화</th>
         <th>극장</th>
         <th>날짜</th>
@@ -57,7 +60,7 @@
     </tr>
 
 	<c:forEach var="reservationView" items="${listReservationView}" varStatus="status">
-      		<tr class="reservationView-list">
+      		<tr class="reservation-list">
             <%-- <td>${reservationView.movieName}</td> --%>
             <td>${reservationView.reservationId}</td>
             <td>${reservationView.theaterName}</td>
@@ -73,32 +76,48 @@
     </c:forEach>
 </table>
     
-    
-    
-    
     <script>
    	 function cancelBtnClick(reservationId) {
    		alert(reservationId);
         //window.location = "http://localhost:8080/movieReservation/cancelReservation?reservationId=" + reservationId;
         alert(event.srcElement.id);
         
-        /* $(document).ready(function() { */
-            $("#"+event.srcElement.id).click(function(){
-                alert("button");
-            }); 
-        /* }); */
-        
-        /* $("#cancelButton"+reservationId).click(function () {
-        	alert("1");
-            
-        });
-        $(function() {
-        	$("#cancelButton5").click(function () {
-        		alert("cancelButton5!!!");
-        	})
-        }); */
-        
-        
+        $("#"+event.srcElement.id).click(function(){
+        	$.ajax({
+                url : "http://localhost:8080/movieReservation/cancelReservation.do",
+                type: "get",
+                data : { "reservationId" : reservationId },
+                success : function(responseData){
+           	     	var reservationViews = responseData.reservationViews;
+           	     	
+                    $("#ajax").remove();
+                    $(".reservation-list").remove(); //필수
+                    
+                    var html = '';
+                    for( i in reservationViews) {
+                    	//TODO: 한글 깨짐
+                    	html += '<tr class="reservation-list">';
+            					<%-- <td>${reservationView.movieName}</td> --%>
+			            html += '<td>' + reservationViews[i].movieName + '</td>';
+			            html += '<td>' + reservationViews[i].theaterName + '</td>';
+			            html += '<td>' + reservationViews[i].date + '</td>';
+			            html += '<td>' + reservationViews[i].roomId + '</td>';
+			            html += '<td><span>' + reservationViews[i].startTime + '~</span><span>' + reservationViews[i].endTime + '</span></td>';
+			            html += '<td>' + reservationViews[i].seatId + '</td>';
+			            html += '<td>' + reservationViews[i].price + '</td>';
+			            html += '<td>' + reservationViews[i].waitOrder + '</td>';
+			            html += '<td> <input type="button" id="cancelButton' + reservationViews[i].reservationId + '" class="payBtn" onclick="cancelBtnClick(' + reservationViews[i].reservationId + ')" value="취소하기' + reservationViews[i].reservationId + '"></td>';
+			            html += '</tr>'; 
+                    }
+                    
+                    
+                    $(".table-header").after(html);
+                }
+            });
+        	
+        	
+        }); 
+
    	 }
 
     </script>

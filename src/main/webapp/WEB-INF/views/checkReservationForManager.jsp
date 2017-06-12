@@ -7,6 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link href="<c:url value="/resources/css/navigation.css"/>" rel="stylesheet">
 <link href="<c:url value="/resources/css/checkReservationForManager.css"/>" rel="stylesheet">
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/nicescroll/3.5.4/jquery.nicescroll.js'></script>
+    <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -34,7 +37,7 @@
                     <select id="movie-select" name="movie-select">
                     	<option selected="selected" value="0">영화 </option>
 						<c:forEach var="movie" items="${listMovie}" varStatus="status">
-		            		<option value="movie${movie.id}">${movie.name}</option>
+		            		<option value="${movie.id}">${movie.name}</option>
 		        		</c:forEach>
 	        		</select>
                 </li>
@@ -46,7 +49,7 @@
                     <select id="theater-select" name="theater-select">
                         <option selected="selected" value="0">극장 </option>
                         <c:forEach var="theater" items="${listTheater}" varStatus="status">
-		            		<option value="theater${theater.id}">${theater.name}</option>
+		            		<option value="${theater.id}">${theater.name}</option>
 		        		</c:forEach>
                     </select>
                 </li>
@@ -55,16 +58,16 @@
             <ul class="date-list">
                 <li>
                     <label>날짜 </label>
-                    <select id="schedule-select" name="schedule-select">
+                    <select id="date-select" name="date-select">
                         <option selected="selected" value="0">날짜 </option>
                        <c:forEach var="schedule" items="${listSchedule}" varStatus="status">
-		            		<option value="schedule${schedule.id}">${schedule.date}</option>
+		            		<option value="${schedule.id}">${schedule.date}</option>
 		        		</c:forEach>
                     </select>
                 </li>
             </ul>
             
-            <button class="searchButton" onclick="searchButtonClick()">검색 </button>
+            <button class="searchButton" onclick="searchButtonClick()" id="searchButton">검색 </button>
 </div>
 <div calss="reservation-table">
 <table style="width: 80%;" align="center">
@@ -78,7 +81,7 @@
         <th>가격</th>
         <th>대기번호 </th>
     </tr>
-
+	
 	<c:forEach var="reservationView" items="${listReservationViews}" varStatus="status">
       	<tr class="reservation-list">
             <%-- <td>${reservationView.movieName}</td> --%>
@@ -100,10 +103,51 @@
 		var selectedMovieValue = e1.options[e1.selectedIndex].value;
 		
 		var e2 = document.getElementById("theater-select");
-		var selectedMovieValue = e2.options[e2.selectedIndex].value;
+		var selectedTheaterValue = e2.options[e2.selectedIndex].value;
 		
-		var e3 = document.getElementById("schedule-select");
-		var selectedMovieValue = e3.options[e3.selectedIndex].value;
+		var e3 = document.getElementById("date-select");
+		var selectedDateValue = e3.options[e3.selectedIndex].value;		
+		var selectedDateText = e3.options[e3.selectedIndex].text;
+		
+		alert("m: " + selectedMovieValue + " t: " + selectedTheaterValue + " s: " + selectedDateValue + " s2: " + selectedDateText);
+		
+		$("#searchButton").click(function () {
+			/* $(".movieLi").removeAttr("style");
+            $(this).css("background-color", "lightblue"); */
+            
+             $.ajax({
+                url : "http://localhost:8080/movieReservation/searchByManager.do",
+                type: "get",
+                data : { "movieId" : selectedMovieValue, "theaterId" : selectedTheaterValue, "dateId" : selectedDateValue, "date" : selectedDateText },
+                success : function(responseData){
+           	     	var reservationViews = responseData.reservationViews;
+           	     	
+                    $("#ajax").remove();
+                    $(".reservation-list").remove(); //필수
+                    
+                    var html = '';
+                    for( i in reservationViews) {
+                    	//TODO: 한글 깨짐
+                    	html += '<tr class="reservation-list">';
+            					<%-- <td>${reservationView.movieName}</td> --%>
+			            html += '<td>' + reservationViews[i].reservationId + '</td>';
+			            html += '<td>' + reservationViews[i].theaterName + '</td>';
+			            html += '<td>' + reservationViews[i].date + '</td>';
+			            html += '<td>' + reservationViews[i].roomId + '</td>';
+			            html += '<td><span>' + reservationViews[i].startTime + '~</span><span>' + reservationViews[i].endTime + '</span></td>';
+			            html += '<td>' + reservationViews[i].seatId + '</td>';
+			            html += '<td>' + reservationViews[i].price + '</td>';
+			            html += '<td>' + reservationViews[i].waitOrder + '</td>';
+			            html += '</tr>'; 
+                    }
+                    
+                    
+                    $(".table-header").after(html);
+                }
+            });
+            
+        });
+		
 	}
 </script>
 </body>

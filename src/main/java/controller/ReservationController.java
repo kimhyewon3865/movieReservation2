@@ -29,6 +29,7 @@ import movie.SelectionMovieTheaterDate;
 import movie.Theater;
 import movie.TheaterDao;
 
+import java.util.ArrayList;
 import java.util.List;
 @Controller
 public class ReservationController {
@@ -207,17 +208,59 @@ public class ReservationController {
 	     return mav;
 	 }
 	 
-	 @RequestMapping(value= "/cancel.do", method=RequestMethod.GET)
+//	 //////////////여기!
+	 @RequestMapping(value= "/searchByManager.do", method=RequestMethod.GET)
+	 public ModelAndView AjaxView5( @RequestParam("theaterId") Integer theaterId, @RequestParam("movieId") Integer movieId, @RequestParam("dateId") Integer dateId, @RequestParam("date") String date) {  
+	     ModelAndView mav= new ModelAndView();
+	     List<ReservationView> reservationViews = new ArrayList<ReservationView>(); //= reservationViewDao.selectAll();
+	     
+	     if (theaterId != 0 && movieId != 0 && dateId != 0 ) {
+	    	 reservationViews = reservationViewDao.selectByMovieIdTheaterIdDate(movieId, theaterId, date);
+	     } else if (theaterId != 0 && movieId != 0 && dateId == 0 ) {
+	    	 reservationViews = reservationViewDao.selectByMovieIdTheaterId(movieId, theaterId);
+	     }  else if (theaterId != 0 && movieId == 0 && dateId != 0 ) {
+	    	 reservationViews = reservationViewDao.selectByTheaterIdDate(theaterId, date);
+	     }  else if (theaterId == 0 && movieId != 0 && dateId != 0 ) {
+	    	 reservationViews = reservationViewDao.selectByMovieIdDate(movieId, date);
+	     }  else if (theaterId != 0 && movieId == 0 && dateId == 0 ) {
+	    	 reservationViews = reservationViewDao.selectByTheaterId(theaterId);
+	     }  else if (theaterId == 0 && movieId != 0 && dateId == 0 ) {
+	    	 reservationViews = reservationViewDao.selectByMovieId(movieId);
+	     }  else if (theaterId == 0 && movieId == 0 && dateId != 0 ) {
+	    	 reservationViews = reservationViewDao.selectByDate(date);
+	     }  else if (theaterId == 0 && movieId == 0 && dateId == 0 ) {
+	    	 reservationViews = reservationViewDao.selectAll();
+	     } else {
+	    	 reservationViews = reservationViewDao.selectAll();
+	     }
+	 
+	    
+	     mav.addObject("reservationViews", reservationViews);
+	     mav.setViewName("jsonView");
+
+	     return mav;
+	 }
+	 
+	 @RequestMapping(value= "/cancelReservation.do", method=RequestMethod.GET)
 	 public ModelAndView AjaxView4(@RequestParam("reservationId") Integer reservationId)   {  
 	     ModelAndView mav = new ModelAndView();
-	     System.out.println("reservationId : " + reservationId);
+		
 	     reservationDao.update(reservationId);
 	     System.out.println("update success!!");
 		 reservationDao.deleteReservation(reservationId);
 		 System.out.println("delete success!!");
-	     List<ReservationView> reservationViews = reservationViewDao.selectByReservationId(reservationId);
-	     System.out.println("dao success!!" + reservationViews);
+
+	     
+//	     List<ReservationView> reservationViews = reservationViewDao.selectByReservationId(reservationId);
+//	     System.out.println("dao success!!" + reservationViews);
+//	     mav.addObject("reservationViews", reservationViews);
+	     
+	     
+	     List<ReservationView> reservationViews = reservationViewDao.selectByUserId("abc");
 	     mav.addObject("reservationViews", reservationViews);
+	     
+	     
+	     
 //	     List<Schedule> schedules = scheduleDao.selectTheaterNamesByMovieIdTheaterIdDate(movieId, theaterId, date);
 //	     mav.addObject("schedules", schedules);
 	     mav.setViewName("jsonView");
