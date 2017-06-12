@@ -24,53 +24,51 @@
         <li>
             <a href="checkReservationForManager" class="dropbtn" onclick="">예약상황 </a>
         </li>
-        <li>
-            <a href="selectTest" onclick="">예약</a>
-        </li>
     </ul>
 </div>
 
 <div class="lists">
 			<ul class="movie-list">
-                <li>
+				<li>
                     <label>영화</label>
-                    <select id="movie" name="movie">
-                        <option selected="selected" value="0">a</option>
-                        <option value="1">a</option>
-                        <option value="2">b</option>
-                        <option value="3">c</option>
-                    </select>
+                    <select id="movie-select" name="movie-select">
+                    	<option selected="selected" value="0">영화 </option>
+						<c:forEach var="movie" items="${listMovie}" varStatus="status">
+		            		<option value="movie${movie.id}">${movie.name}</option>
+		        		</c:forEach>
+	        		</select>
                 </li>
             </ul>
             
             <ul class="theater-list">
                 <li>
                     <label>극장 </label>
-                    <select id="movie" name="movie">
-                        <option selected="selected" value="0">a</option>
-                        <option value="1">a</option>
-                        <option value="2">b</option>
-                        <option value="3">c</option>
+                    <select id="theater-select" name="theater-select">
+                        <option selected="selected" value="0">극장 </option>
+                        <c:forEach var="theater" items="${listTheater}" varStatus="status">
+		            		<option value="theater${theater.id}">${theater.name}</option>
+		        		</c:forEach>
                     </select>
                 </li>
             </ul>
             
             <ul class="date-list">
                 <li>
-                    <label>극장 </label>
-                    <select id="movie" name="movie">
-                        <option selected="selected" value="0">a</option>
-                        <option value="1">a</option>
-                        <option value="2">b</option>
-                        <option value="3">c</option>
+                    <label>날짜 </label>
+                    <select id="schedule-select" name="schedule-select">
+                        <option selected="selected" value="0">날짜 </option>
+                       <c:forEach var="schedule" items="${listSchedule}" varStatus="status">
+		            		<option value="schedule${schedule.id}">${schedule.date}</option>
+		        		</c:forEach>
                     </select>
                 </li>
             </ul>
-            <button class="searchButton">검색 </button>
+            
+            <button class="searchButton" onclick="searchButtonClick()">검색 </button>
 </div>
-<div>
+<div calss="reservation-table">
 <table style="width: 80%;" align="center">
-    <tr>
+    <tr class="table-header">
         <th>영화</th>
         <th>극장</th>
         <th>날짜</th>
@@ -78,23 +76,35 @@
         <th>시간</th>
         <th>좌석</th>
         <th>가격</th>
-        <th>대기/예약</th>
-        <th>취소</th>
+        <th>대기번호 </th>
     </tr>
 
-    <tr>
-        <td>캐리비안해적</td>
-        <td>강남</td>
-        <td>5/29</td>
-        <td>3관 8층</td>
-        <td>8:00</td>
-        <td>1A</td>
-        <td>10000</td>
-        <td>예약</td>
-        <td><a href="#">취소</a> </td>
-    </tr>
+	<c:forEach var="reservationView" items="${listReservationViews}" varStatus="status">
+      	<tr class="reservation-list">
+            <%-- <td>${reservationView.movieName}</td> --%>
+            <td>${reservationView.reservationId}</td>
+            <td>${reservationView.theaterName}</td>
+            <td>${reservationView.date}</td>
+            <td>${reservationView.roomId}</td>
+            <td><span>${reservationView.startTime}~</span><span>${reservation.endTime}</span></td>
+            <td>${reservationView.seatId}</td>
+            <td>${reservationView.price}</td>
+            <td>${reservationView.waitOrder}</td>
+      	</tr>
+    </c:forEach>
 </table>
 </div>
-
+<script>
+	function searchButtonClick() {
+		var e1 = document.getElementById("movie-select");
+		var selectedMovieValue = e1.options[e1.selectedIndex].value;
+		
+		var e2 = document.getElementById("theater-select");
+		var selectedMovieValue = e2.options[e2.selectedIndex].value;
+		
+		var e3 = document.getElementById("schedule-select");
+		var selectedMovieValue = e3.options[e3.selectedIndex].value;
+	}
+</script>
 </body>
 </html>

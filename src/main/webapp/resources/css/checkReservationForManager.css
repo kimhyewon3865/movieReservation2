@@ -5,9 +5,10 @@
     display: flex;
      width: 80%;
     margin-left: 10%;
+    margin-top: 10px;
 	float: left;
     height: 15%;
-    background-color: #458dcc;
+    background-color: #f6b184;
 }
 
 .movie-list {
@@ -32,4 +33,16 @@
 	margin-top: 10px;
 	width: 100px;
 	height: 100%;
+}
+
+.reservation-table {
+	margin-top: 10px;	
+}
+
+.table-header {
+	background-color: yellowgreen;
+}
+
+.reservation-list {
+	background-color: lightgoldenrodyellow;
 }

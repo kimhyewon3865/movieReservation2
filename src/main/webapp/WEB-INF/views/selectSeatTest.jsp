@@ -69,7 +69,7 @@
     </div>
 
     <div class = "seat-information" style="height: 60%;">
- 		<!-- <form action="addReservation" method="post"> -->
+ 		<form action="addReservation" method="post">
             <div class="seat-table">
                  <ol>
                     <input type="hidden" name="scheduleId" value="${schedule}">

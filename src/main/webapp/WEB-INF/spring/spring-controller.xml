@@ -14,6 +14,8 @@
 			<property name="seatDao" ref="seatDao"/>
 			<property name="reservationService" ref="reservationService"/>
 			<property name="reservationViewDao" ref="reservationViewDao"/>
+			<property name="memberDao" ref="memberDao"/>
+			<property name="memberRegisterService" ref="memberRegisterService"/>
 	</bean>
 	
 	

@@ -3,12 +3,16 @@ package controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import movie.Member;
+import movie.MemberDao;
+import movie.MemberRegisterService;
 import movie.Movie;
 import movie.MovieDao;
 import movie.Reservation;
@@ -34,12 +38,17 @@ public class ReservationController {
     private ReservationDao reservationDao;
     private SeatDao seatDao;
     private ReservationViewDao reservationViewDao;
-    
+    private MemberDao memberDao;
+   
 	private ReservationService reservationService;
-
-	public void setReservationService(
-			ReservationService reservationService) {
+	private MemberRegisterService memberRegisterService;
+	
+	public void setReservationService(ReservationService reservationService) {
 		this.reservationService = reservationService;
+	}
+	
+	public void setMemberRegisterService(MemberRegisterService memberRegisterService) {
+		this.memberRegisterService = memberRegisterService;
 	}
 	
 	public void setMovieDao(MovieDao movieDao) {
@@ -66,6 +75,10 @@ public class ReservationController {
 		this.reservationViewDao = reservationViewDao;
 	}
 	
+	public void setMemberDao(MemberDao memberDao) {
+		this.memberDao = memberDao;
+	}
+	
 	@RequestMapping("/")
     public String index(Model model) {
        
@@ -73,9 +86,7 @@ public class ReservationController {
     }
 
 	@RequestMapping("/selectTest")
-    public String selectTest(Model model) {
-		
-		
+    public String selectTest(Model model) {	
         List<Movie> listMovie = movieDao.selectAll();
         List<Theater> listTheater = theaterDao.selectAll();
         List<Schedule> listSchedule = scheduleDao.selectAll();
@@ -86,7 +97,7 @@ public class ReservationController {
         List<Integer> seatWaitOrderList = reservationDao.selectSeatWaitOrdersByScheduleIdRoomIdTheaterId(8, 2, 2);
         model.addAttribute("seatWaitOrderList", seatWaitOrderList);
         /////remove
-        
+       
         model.addAttribute("listMovie", listMovie);
         model.addAttribute("listTheater", listTheater);
         model.addAttribute("listSchedule", listSchedule);
@@ -216,8 +227,17 @@ public class ReservationController {
 	 
 	 @RequestMapping("/checkReservationForManager")
 	 public String checkReservationForManager(Model model) {		
-	       
-	        return "checkReservationForManager";
+		 List<ReservationView> listReservationViews = reservationViewDao.selectAll();
+		 model.addAttribute("listReservationViews", listReservationViews);
+	     
+		 List<Movie> listMovie = movieDao.selectAll();
+		 List<Theater> listTheater = theaterDao.selectAll();
+		 List<Schedule> listSchedule = scheduleDao.selectAll();
+	     model.addAttribute("listMovie", listMovie);
+	     model.addAttribute("listTheater", listTheater);
+	     model.addAttribute("listSchedule", listSchedule);
+		 
+	     return "checkReservationForManager";
 	 }	
 
 	 
@@ -238,8 +258,28 @@ public class ReservationController {
 		 return "reservationHistoryCancel";
 	 }
 	 
-	 @RequestMapping("/signUpSignIn")
-	 public String signUpSignIn(Model model) {		
-	        return "signUpSignIn";
-	 }	 
+//	 @RequestMapping("/signUpSignIn")
+//	 public String signUpSignIn(Model model) {		
+//	        return "signUpSignIn";
+//	 }	 
+//	 
+	 @RequestMapping("/login")
+	 public String login(Model model) {		
+	        return "login";
+	 }	
+	 
+	 @RequestMapping("/login.do")
+	 public String loginDo(Model model, @RequestParam(value="id", required=false) String id, @RequestParam(value="password", required=false) String password) {		
+		 System.out.println("id: " + id + "password: " + password);
+		 if (memberDao.isMember(id, password) != 0 ) {
+			 return "selectTest";
+		 } else {
+			 return "cancelReservation";
+		 }
+	 }
+
+	 
+
+
 }
+
